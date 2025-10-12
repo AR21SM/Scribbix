@@ -1,0 +1,25 @@
+{
+  "name": "scribbix",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Professional collaborative whiteboard for real-time drawing and team collaboration",
+  "author": "Ashish Mahajan",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo clean && rm -rf node_modules",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@9.14.4",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}
