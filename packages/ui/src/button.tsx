@@ -8,9 +8,17 @@ interface ButtonProps {
   onClick?: () => void;
   size: "lg" | "sm";
   children: ReactNode;
+  disabled?: boolean;
 }
 
-export const Button = ({ size, variant, className, onClick, children  }: ButtonProps) => {
+export const Button = ({
+  size,
+  variant,
+  className,
+  onClick,
+  children,
+  disabled,
+}: ButtonProps) => {
   return (
     <button
       className={`${className}
@@ -18,6 +26,7 @@ export const Button = ({ size, variant, className, onClick, children  }: ButtonP
         ${size === "lg" ? "px-4 py-2" : "px-2 py-1"}
       `}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>

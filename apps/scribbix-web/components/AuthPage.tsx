@@ -4,157 +4,304 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HTTP_BACKEND } from "@/config";
 import axios from "axios";
+import Link from "next/link";
+import { ArrowRight, LoaderCircle, Github } from "lucide-react";
 
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
-    const router = useRouter();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-        try {
-            const endpoint = isSignin ? "/api/signin" : "/api/signup";
-            const payload = isSignin
-                ? { username: email, password }
-                : { username: email, password, name };
+    try {
+      const endpoint = isSignin ? "/api/signin" : "/api/signup";
+      const payload = isSignin
+        ? { username: email, password }
+        : { username: email, password, name };
+      const response = await axios.post(`${HTTP_BACKEND}${endpoint}`, payload);
 
-            const response = await axios.post(`${HTTP_BACKEND}${endpoint}`, payload);
-
-            if (response.data.token) {
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem("userId", response.data.userId);
-                if (response.data.name) {
-                    localStorage.setItem("userName", response.data.name);
-                }
-                router.push("/dashboard");
-            } else {
-                setError("Authentication failed. Please try again.");
-            }
-        } catch (err) {
-            const axiosError = err as { response?: { data?: { message?: string } } };
-            setError(
-                axiosError.response?.data?.message || 
-                "An error occurred. Please try again."
-            );
-        } finally {
-            setLoading(false);
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+        if (response.data.name) {
+          localStorage.setItem("userName", response.data.name);
         }
-    };
+        router.push("/dashboard");
+      } else {
+        setError("Authentication failed. Please try again.");
+      }
+    } catch (err) {
+      const axiosError = err as { response?: { data?: { message?: string } } };
+      setError(
+        axiosError.response?.data?.message ||
+          "An error occurred. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-4xl font-extrabold text-white">
-                        {isSignin ? "Welcome back" : "Create your account"}
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-400">
-                        {isSignin ? (
-                            <>
-                                Don&apos;t have an account?{" "}
-                                <a href="/signup" className="font-medium text-blue-500 hover:text-blue-400">
-                                    Sign up
-                                </a>
-                            </>
-                        ) : (
-                            <>
-                                Already have an account?{" "}
-                                <a href="/signin" className="font-medium text-blue-500 hover:text-blue-400">
-                                    Sign in
-                                </a>
-                            </>
-                        )}
-                    </p>
-                </div>
-                
-                <form className="mt-8 space-y-6 bg-gray-800 p-8 rounded-lg shadow-2xl border border-gray-700" onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        {!isSignin && (
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                                    Full Name
-                                </label>
-                                <input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    required={!isSignin}
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="John Doe"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                />
-                            </div>
-                        )}
-                        
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                                Email address
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="name@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete={isSignin ? "current-password" : "new-password"}
-                                required
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                    </div>
+  return (
+    <main className="min-h-screen bg-[#fafafb] font-sans text-slate-900 antialiased selection:bg-violet-100 selection:text-violet-950 flex items-center justify-center p-6 md:p-10">
+      {/* Unified Card Container */}
+      <div className="w-full max-w-6xl rounded-[32px] border border-slate-200/60 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden flex flex-col">
+        {/* Body Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr] flex-grow">
+          {/* Left Column (App Brand & Info Showcase) */}
+          <section className="hidden overflow-hidden border-r border-slate-200/50 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9]/30 to-[#f8fafc] px-12 py-10 lg:flex lg:flex-col justify-between">
+            {/* Brand Logo */}
+            <Link
+              href="/"
+              className="inline-flex w-fit items-center text-3xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity"
+            >
+              <span>Skribbi</span>
+              <span className="relative inline-block">
+                x
+                <svg
+                  className="absolute -top-2 -right-3 size-4 text-[#ffbe5c] rotate-[15deg]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                >
+                  <path d="M6 18 L3 12" />
+                  <path d="M12 16 L12 9" />
+                  <path d="M16 18 L20 14" />
+                </svg>
+              </span>
+            </Link>
 
-                    {error && (
-                        <div className="rounded-md bg-red-900/50 border border-red-700 p-4">
-                            <p className="text-sm text-red-200">{error}</p>
-                        </div>
-                    )}
+            <div className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center my-6">
+              <h1 className="max-w-md text-3xl font-black leading-[1.12] tracking-tight text-[#0a1128] xl:text-4xl">
+                Turn every idea into something your team can see.
+              </h1>
+              <p className="mt-4 max-w-md text-sm font-medium leading-relaxed text-slate-500">
+                Brainstorm, plan, and build together on one playful visual
+                workspace.
+              </p>
 
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                            {loading ? (
-                                <span className="flex items-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Processing...
-                                </span>
-                            ) : (
-                                isSignin ? "Sign in" : "Create account"
-                            )}
-                        </button>
-                    </div>
-                </form>
+              <img
+                src="/images/auth-collaboration-wide.png"
+                alt="A team collaborating around a Scribbix whiteboard"
+                className="mx-auto mt-7 max-h-[420px] w-[112%] max-w-none object-contain xl:max-h-[460px]"
+              />
             </div>
+          </section>
+
+          {/* Right Column (Form Panel) */}
+          <section className="flex items-center justify-center bg-white px-6 py-12 sm:px-10 lg:px-14">
+            <div className="w-full max-w-sm">
+              <Link
+                href="/"
+                className="mb-10 inline-flex items-center text-2xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity lg:hidden"
+              >
+                <span>Skribbi</span>
+                <span className="relative inline-block">
+                  x
+                  <svg
+                    className="absolute -top-2 -right-3 size-4 text-[#ffbe5c] rotate-[15deg]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  >
+                    <path d="M6 18 L3 12" />
+                    <path d="M12 16 L12 9" />
+                    <path d="M16 18 L20 14" />
+                  </svg>
+                </span>
+              </Link>
+
+              <div className="mb-8">
+                <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-violet-600">
+                  {isSignin ? "Welcome back" : "Start creating"}
+                </p>
+                <h2 className="text-4xl font-black tracking-tight text-[#0a1128]">
+                  {isSignin ? "Sign in to Scribbix" : "Create your account"}
+                </h2>
+                <p className="mt-3 text-sm font-medium text-slate-500">
+                  {isSignin ? (
+                    <>
+                      New to Scribbix?{" "}
+                      <Link
+                        href="/signup"
+                        className="font-extrabold text-violet-600 hover:text-violet-700"
+                      >
+                        Create a free account
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      Already have an account?{" "}
+                      <Link
+                        href="/signin"
+                        className="font-extrabold text-violet-600 hover:text-violet-700"
+                      >
+                        Sign in
+                      </Link>
+                    </>
+                  )}
+                </p>
+              </div>
+
+              <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-4">
+                  {!isSignin && (
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className="mb-2 block text-sm font-extrabold text-slate-700"
+                      >
+                        Full name
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required={!isSignin}
+                        className="h-12 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                        placeholder="Your full name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="mb-2 block text-sm font-extrabold text-slate-700"
+                    >
+                      Email address
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className="h-12 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="mb-2 block text-sm font-extrabold text-slate-700"
+                    >
+                      Password
+                    </label>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete={
+                        isSignin ? "current-password" : "new-password"
+                      }
+                      required
+                      className="h-12 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="rounded-xl border border-rose-100 bg-rose-50 p-4 text-xs font-semibold leading-normal text-rose-600">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-extrabold text-white shadow-lg shadow-slate-900/15 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {loading ? (
+                    <>
+                      <LoaderCircle className="size-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      {isSignin ? "Sign in" : "Create account"}
+                      <ArrowRight className="size-4" />
+                    </>
+                  )}
+                </button>
+
+                {/* Separator */}
+                <div className="relative flex py-1 items-center">
+                  <div className="flex-grow border-t border-slate-200/70"></div>
+                  <span className="flex-shrink mx-4 text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400">
+                    or continue with
+                  </span>
+                  <div className="flex-grow border-t border-slate-200/70"></div>
+                </div>
+
+                {/* OAuth Social Buttons */}
+                <div className="grid grid-cols-2 gap-3.5">
+                  <button
+                    type="button"
+                    onClick={() => {}}
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 active:scale-[0.98]"
+                  >
+                    <svg
+                      className="size-4 mr-0.5"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        fill="#4285F4"
+                      />
+                      <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        fill="#34A853"
+                      />
+                      <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                        fill="#FBBC05"
+                      />
+                      <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335"
+                      />
+                    </svg>
+                    Google
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {}}
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 active:scale-[0.98]"
+                  >
+                    <Github className="size-4 text-slate-900" />
+                    GitHub
+                  </button>
+                </div>
+              </form>
+
+              <p className="mt-7 text-center text-xs font-medium leading-relaxed text-slate-400">
+                By continuing, you agree to Scribbix&apos;s Terms of Service and
+                Privacy Policy.
+              </p>
+            </div>
+          </section>
         </div>
-    );
+      </div>
+    </main>
+  );
 }
