@@ -36,9 +36,10 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
             } else {
                 setError("Authentication failed. Please try again.");
             }
-        } catch (err: any) {
+        } catch (err) {
+            const axiosError = err as { response?: { data?: { message?: string } } };
             setError(
-                err.response?.data?.message || 
+                axiosError.response?.data?.message || 
                 "An error occurred. Please try again."
             );
         } finally {
@@ -56,7 +57,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                     <p className="mt-2 text-center text-sm text-gray-400">
                         {isSignin ? (
                             <>
-                                Don't have an account?{" "}
+                                Don&apos;t have an account?{" "}
                                 <a href="/signup" className="font-medium text-blue-500 hover:text-blue-400">
                                     Sign up
                                 </a>

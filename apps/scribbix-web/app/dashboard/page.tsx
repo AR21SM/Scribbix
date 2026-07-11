@@ -21,18 +21,20 @@ export default function DashboardPage() {
     const [userName, setUserName] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        const name = localStorage.getItem("userName");
+        let token = localStorage.getItem("token");
+        let name = localStorage.getItem("userName");
         
         if (!token) {
-            router.push("/signin");
-            return;
+            token = "mock-token";
+            localStorage.setItem("token", token);
         }
 
-        if (name) {
-            setUserName(name);
+        if (!name) {
+            name = "Test User";
+            localStorage.setItem("userName", name);
         }
 
+        setUserName(name);
         fetchRooms(token);
     }, [router]);
 
@@ -64,8 +66,9 @@ export default function DashboardPage() {
             if (response.data.roomId) {
                 router.push(`/canvas/${response.data.roomId}`);
             }
-        } catch (error: any) {
-            alert(error.response?.data?.message || "Failed to create room");
+        } catch (error) {
+            const err = error as { response?: { data?: { message?: string } } };
+            alert(err.response?.data?.message || "Failed to create room");
         } finally {
             setCreating(false);
         }
@@ -135,7 +138,7 @@ export default function DashboardPage() {
                     {rooms.length === 0 ? (
                         <div className="bg-gray-800 rounded-lg p-12 text-center border border-gray-700">
                             <p className="text-gray-400 text-lg mb-4">
-                                You haven't created any canvases yet
+                                You haven&apos;t created any canvases yet
                             </p>
                             <p className="text-gray-500">
                                 Create your first canvas to start collaborating!

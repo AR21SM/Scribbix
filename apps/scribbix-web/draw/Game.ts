@@ -150,7 +150,7 @@ export class Game {
 
     drawShape(shape: Shape) {
         this.ctx.strokeStyle = shape.color || "#ffffff";
-        this.ctx.lineWidth = shape.strokeWidth || 2;
+        this.ctx.lineWidth = ("strokeWidth" in shape) ? (shape.strokeWidth || 2) : 2;
         this.ctx.lineCap = "round";
         this.ctx.lineJoin = "round";
 

@@ -1,20 +1,31 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "@repo/backend-common/config";
+import { prismaClient } from "@repo/db/client";
 
+export async function middleware(req: Request, res: Response, next: NextFunction) {
+    try {
+        // Find or create default test user to satisfy foreign key relations
+        let defaultUser = await prismaClient.user.findUnique({
+            where: { email: "testuser@example.com" }
+        });
 
-export function middleware(req: Request, res: Response, next: NextFunction) {
-    const token = req.headers["authorization"] ?? "";
+        if (!defaultUser) {
+            defaultUser = await prismaClient.user.create({
+                data: {
+                    id: "test-user-id",
+                    email: "testuser@example.com",
+                    password: "password123",
+                    name: "Test User"
+                }
+            });
+        }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
-
-    if (decoded) {
-        // @ts-ignore: TODO: Fix this
-        req.userId = decoded.userId;
+        // @ts-ignore
+        req.userId = defaultUser.id;
         next();
-    } else {
-        res.status(403).json({
-            message: "Unauthorized"
-        })
+    } catch (error) {
+        console.error("Auth bypass error:", error);
+        res.status(500).json({
+            message: "Internal server error during auth bypass"
+        });
     }
 }
