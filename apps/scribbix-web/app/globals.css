@@ -1,50 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 210 40% 98%;
+    --foreground: 224 71.4% 4.1%;
+
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 224 71.4% 4.1%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 221 83% 53%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
-    --radius: 0.75rem;
+    --ring: 262.1 83.3% 57.8%;
+
+    --radius: 1.25rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 263.4 70% 50.4%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 70% 50.4%;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Sketch Font */
+.font-sketch {
+  font-family: 'Architects Daughter', cursive, sans-serif;
+}
+
+/* Excalidraw Hand-drawn look */
+.sketch-border {
+  border: 2px solid #0f172a;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+/* Floating Cursors styling */
+.cursor-label {
+  animation: cursorPulse 2s infinite ease-in-out;
+}
+
+@keyframes cursorPulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Background Grids */
+.awwwards-grid {
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.whiteboard-dots {
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* Decorative floating animations */
+.animate-float-slow {
+  animation: floatSlow 8s infinite ease-in-out;
+}
+.animate-float-delayed {
+  animation: floatDelayed 7s infinite ease-in-out;
+}
+.animate-float-reverse {
+  animation: floatReverse 9s infinite ease-in-out;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+@keyframes floatDelayed {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.03); }
+}
+@keyframes floatReverse {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(8px) rotate(-2deg); }
 }
