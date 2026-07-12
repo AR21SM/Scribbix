@@ -811,6 +811,16 @@ export default function Page() {
               </div>
               <p className="text-[10.5px] text-slate-400 font-semibold tracking-wide">
                 &copy; {new Date().getFullYear()} Skribbix. All rights reserved.
+                <span className="mx-1.5 opacity-60">•</span>
+                Designed with <span className="text-rose-500">❤️</span> by{" "}
+                <Link
+                  href="https://github.com/AR21SM"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline hover:text-slate-600 transition-colors font-bold"
+                >
+                  AR21SM
+                </Link>
               </p>
             </div>
           </div>
