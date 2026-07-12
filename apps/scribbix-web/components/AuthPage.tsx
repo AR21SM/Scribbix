@@ -49,17 +49,17 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
   };
 
   return (
-    <main className="min-h-screen bg-[#fafafb] font-sans text-slate-900 antialiased selection:bg-violet-100 selection:text-violet-950 flex items-center justify-center p-6 md:p-10">
+    <main className="min-h-screen bg-[#fafafb] font-sans text-slate-900 antialiased selection:bg-violet-100 selection:text-violet-950 flex items-center justify-center p-4 md:p-6">
       {/* Unified Card Container */}
-      <div className="w-full max-w-6xl rounded-[32px] border border-slate-200/60 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden flex flex-col">
+      <div className="w-full max-w-5xl rounded-[28px] border border-slate-200/60 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden flex flex-col">
         {/* Body Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr] flex-grow">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] flex-grow">
           {/* Left Column (App Brand & Info Showcase) */}
-          <section className="hidden overflow-hidden border-r border-slate-200/50 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9]/30 to-[#f8fafc] px-12 py-10 lg:flex lg:flex-col justify-between">
+          <section className="hidden overflow-hidden border-r border-slate-200/50 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9]/30 to-[#f8fafc] px-10 py-8 lg:flex lg:flex-col justify-between">
             {/* Brand Logo */}
             <Link
               href="/"
-              className="inline-flex w-fit items-center text-3xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity"
+              className="inline-flex w-fit items-center text-2xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity"
             >
               <span>Skribbi</span>
               <span className="relative inline-block">
@@ -79,11 +79,11 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
               </span>
             </Link>
 
-            <div className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center my-6">
-              <h1 className="max-w-md text-3xl font-black leading-[1.12] tracking-tight text-[#0a1128] xl:text-4xl">
+            <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center my-4">
+              <h1 className="max-w-xs text-2xl font-black leading-[1.12] tracking-tight text-[#0a1128] xl:text-3xl">
                 Turn every idea into something your team can see.
               </h1>
-              <p className="mt-4 max-w-md text-sm font-medium leading-relaxed text-slate-500">
+              <p className="mt-3 max-w-xs text-xs font-medium leading-relaxed text-slate-500">
                 Brainstorm, plan, and build together on one playful visual
                 workspace.
               </p>
@@ -91,17 +91,17 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
               <img
                 src="/images/auth-collaboration-wide.png"
                 alt="A team collaborating around a Scribbix whiteboard"
-                className="mx-auto mt-7 max-h-[420px] w-[112%] max-w-none object-contain xl:max-h-[460px]"
+                className="mx-auto mt-6 max-h-[310px] w-full object-contain xl:max-h-[350px]"
               />
             </div>
           </section>
 
           {/* Right Column (Form Panel) */}
-          <section className="flex items-center justify-center bg-white px-6 py-12 sm:px-10 lg:px-14">
+          <section className="flex items-center justify-center bg-white px-6 py-10 sm:px-10 lg:px-12">
             <div className="w-full max-w-sm">
               <Link
                 href="/"
-                className="mb-10 inline-flex items-center text-2xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity lg:hidden"
+                className="mb-8 inline-flex items-center text-xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity lg:hidden"
               >
                 <span>Skribbi</span>
                 <span className="relative inline-block">
@@ -121,14 +121,14 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 </span>
               </Link>
 
-              <div className="mb-8">
-                <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-violet-600">
+              <div className="mb-6">
+                <p className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-violet-600">
                   {isSignin ? "Welcome back" : "Start creating"}
                 </p>
-                <h2 className="text-4xl font-black tracking-tight text-[#0a1128]">
+                <h2 className="text-3xl font-black tracking-tight text-[#0a1128]">
                   {isSignin ? "Sign in to Scribbix" : "Create your account"}
                 </h2>
-                <p className="mt-3 text-sm font-medium text-slate-500">
+                <p className="mt-2 text-xs font-medium text-slate-500">
                   {isSignin ? (
                     <>
                       New to Scribbix?{" "}
@@ -153,13 +153,13 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 </p>
               </div>
 
-              <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-                <div className="flex flex-col gap-4">
+              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-3.5">
                   {!isSignin && (
                     <div>
                       <label
                         htmlFor="name"
-                        className="mb-2 block text-sm font-extrabold text-slate-700"
+                        className="mb-1.5 block text-xs font-extrabold text-slate-700"
                       >
                         Full name
                       </label>
@@ -168,7 +168,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                         name="name"
                         type="text"
                         required={!isSignin}
-                        className="h-12 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                        className="h-11 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
                         placeholder="Your full name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -179,7 +179,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   <div>
                     <label
                       htmlFor="email"
-                      className="mb-2 block text-sm font-extrabold text-slate-700"
+                      className="mb-1.5 block text-xs font-extrabold text-slate-700"
                     >
                       Email address
                     </label>
@@ -189,7 +189,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                       type="email"
                       autoComplete="email"
                       required
-                      className="h-12 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                      className="h-11 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -199,7 +199,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   <div>
                     <label
                       htmlFor="password"
-                      className="mb-2 block text-sm font-extrabold text-slate-700"
+                      className="mb-1.5 block text-xs font-extrabold text-slate-700"
                     >
                       Password
                     </label>
@@ -211,7 +211,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                         isSignin ? "current-password" : "new-password"
                       }
                       required
-                      className="h-12 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                      className="h-11 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -228,7 +228,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-extrabold text-white shadow-lg shadow-slate-900/15 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-extrabold text-white shadow-lg shadow-slate-900/15 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? (
                     <>
@@ -257,7 +257,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   <button
                     type="button"
                     onClick={() => {}}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 active:scale-[0.98]"
+                    className="flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 active:scale-[0.98]"
                   >
                     <svg
                       className="size-4 mr-0.5"
@@ -286,7 +286,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   <button
                     type="button"
                     onClick={() => {}}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 active:scale-[0.98]"
+                    className="flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 active:scale-[0.98]"
                   >
                     <Github className="size-4 text-slate-900" />
                     GitHub
@@ -294,7 +294,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 </div>
               </form>
 
-              <p className="mt-7 text-center text-xs font-medium leading-relaxed text-slate-400">
+              <p className="mt-5 text-center text-xs font-medium leading-relaxed text-slate-400">
                 By continuing, you agree to Scribbix&apos;s Terms of Service and
                 Privacy Policy.
               </p>
