@@ -816,9 +816,8 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Large Backdrop Text Overlay */}
-        <div className="absolute bottom-[-8%] sm:bottom-[-12%] lg:bottom-[-16%] left-0 right-0 w-full flex justify-center select-none pointer-events-none z-0">
-          <span className="font-sans font-black text-[14vw] tracking-[0.06em] leading-none text-center uppercase bg-gradient-to-b from-black/[0.15] to-black/0 text-transparent bg-clip-text">
+        <div className="absolute bottom-0 sm:bottom-[-6%] lg:bottom-[-10%] left-0 right-0 w-full flex justify-center select-none pointer-events-none z-0">
+          <span className="font-sans font-black text-[18vw] sm:text-[14vw] tracking-[0.06em] leading-none text-center uppercase bg-gradient-to-b from-black/[0.15] to-black/0 text-transparent bg-clip-text">
             Skribbix
           </span>
         </div>
