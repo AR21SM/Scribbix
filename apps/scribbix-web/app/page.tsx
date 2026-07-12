@@ -133,17 +133,18 @@ export default function Page() {
                     Start a whiteboard – it&apos;s free
                   </Button>
                 </Link>
-                <button
-                  type="button"
-                  onClick={() =>
+                <a
+                  href="#sandbox"
+                  onClick={(e) => {
+                    e.preventDefault();
                     document
                       .getElementById("sandbox")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
                   className="h-12 w-full sm:w-auto px-6 text-sm font-bold text-slate-600 bg-white rounded-xl border border-slate-200/80 shadow-sm inline-flex items-center justify-center whitespace-nowrap"
                 >
                   Try Demo
-                </button>
+                </a>
               </div>
             </div>
 
