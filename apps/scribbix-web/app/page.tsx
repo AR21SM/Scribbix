@@ -39,8 +39,8 @@ export default function Page() {
           w-full flex items-center justify-between transition-all duration-500 ease-in-out pointer-events-auto
           ${
             scrolled
-              ? "w-[90%] md:w-[95%] max-w-5xl mt-4 px-6 py-3 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/60 shadow-lg shadow-slate-100/50 mx-auto"
-              : "max-w-[1440px] mt-0 px-6 md:px-16 py-5 bg-white/80 backdrop-blur-md rounded-none border border-transparent border-b-slate-100/50 shadow-none mx-auto"
+              ? "w-[92%] sm:w-[95%] max-w-5xl mt-4 px-4 sm:px-6 py-3 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/60 shadow-lg shadow-slate-100/50 mx-auto"
+              : "max-w-[1440px] mt-0 px-4 sm:px-16 py-5 bg-white/80 backdrop-blur-md rounded-none border border-transparent border-b-slate-100/50 shadow-none mx-auto"
           }
         `}
         >
@@ -87,7 +87,7 @@ export default function Page() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left Content */}
             <div className="lg:col-span-4 text-left flex flex-col justify-center relative">
-              <h1 className="text-5xl lg:text-6xl xl:text-[68px] font-bold tracking-tight text-[#0a1128] leading-[1.12]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-[68px] font-bold tracking-tight text-[#0a1128] leading-[1.12]">
                 Think. Draw.
                 <br />
                 Build{" "}
@@ -96,11 +96,11 @@ export default function Page() {
                     src="/images/hero-underline.png"
                     alt=""
                     aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-7 left-[5%] h-14 w-[114%] select-none object-fill z-0"
+                    className="pointer-events-none absolute -bottom-4 sm:-bottom-7 left-[5%] h-8 sm:h-12 lg:h-14 w-[114%] select-none object-fill z-0"
                   />
                   <span className="relative z-10">together.</span>
                   <svg
-                    className="absolute -top-8 lg:-top-9 -right-8 lg:-right-9 size-10 lg:size-12 rotate-[15deg]"
+                    className="absolute -top-6 lg:-top-9 -right-6 lg:-right-9 size-8 lg:size-12 rotate-[15deg]"
                     viewBox="0 0 32 32"
                     fill="none"
                     stroke="#ff9f1c"
@@ -534,7 +534,7 @@ export default function Page() {
 
             {/* Right side sandboxed canvas */}
             <div className="lg:col-span-7">
-              <div className="relative w-full h-[460px] sm:h-[500px] rounded-3xl border border-slate-200/70 overflow-hidden shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] bg-slate-50">
+              <div className="relative w-full h-[360px] sm:h-[460px] lg:h-[500px] rounded-3xl border border-slate-200/70 overflow-hidden shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] bg-slate-50">
                 <Canvas
                   roomId="landing-sandbox"
                   socket={
