@@ -809,10 +809,12 @@ export default function Page() {
                   <Linkedin className="size-4.5" />
                 </Link>
               </div>
-              <p className="text-[10.5px] text-slate-400 font-semibold tracking-wide">
-                &copy; {new Date().getFullYear()} Skribbix. All rights reserved.
-                <span className="mx-1.5 opacity-60">•</span>
-                Designed with <span className="text-rose-500">❤️</span> by{" "}
+              <p className="text-[10.5px] text-slate-400 font-semibold tracking-wide flex flex-wrap items-center justify-center md:justify-end gap-1">
+                <span>&copy; {new Date().getFullYear()} Skribbix</span>
+                <span className="opacity-60">•</span>
+                <span>Built with</span>
+                <Heart className="size-3 fill-rose-500 text-rose-500" />
+                <span>by</span>
                 <Link
                   href="https://github.com/AR21SM"
                   target="_blank"
