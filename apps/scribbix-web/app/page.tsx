@@ -39,8 +39,8 @@ export default function Page() {
           w-full flex items-center justify-between transition-all duration-500 ease-in-out pointer-events-auto
           ${
             scrolled
-              ? "w-[92%] sm:w-[95%] max-w-5xl mt-4 px-4 sm:px-6 py-3 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/60 shadow-lg shadow-slate-100/50 mx-auto"
-              : "max-w-[1440px] mt-0 px-4 sm:px-16 py-5 bg-white/80 backdrop-blur-md rounded-none border border-transparent border-b-slate-100/50 shadow-none mx-auto"
+              ? "w-[92%] md:w-[95%] max-w-5xl mt-4 px-4 md:px-6 py-3 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/60 shadow-lg shadow-slate-100/50 mx-auto"
+              : "max-w-[1440px] mt-0 px-4 md:px-16 py-5 bg-white/80 backdrop-blur-md rounded-none border border-transparent border-b-slate-100/50 shadow-none mx-auto"
           }
         `}
         >
