@@ -134,6 +134,7 @@ export default function Page() {
                   </Button>
                 </Link>
                 <button
+                  type="button"
                   onClick={() =>
                     document
                       .getElementById("sandbox")
