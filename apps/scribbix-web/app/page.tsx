@@ -82,9 +82,9 @@ export default function Page() {
         </div>
       </header>
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-white pb-16 pt-24 lg:pb-20 lg:pt-32">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <section className="relative overflow-hidden bg-white pb-10 sm:pb-16 pt-24 sm:pt-28 lg:pb-20 lg:pt-32">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
             {/* Left Content */}
             <div className="lg:col-span-4 text-left flex flex-col justify-center relative">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-[68px] font-bold tracking-tight text-[#0a1128] leading-[1.12]">
@@ -229,15 +229,15 @@ export default function Page() {
           </div>
         </div>
       </section>
-      {/* BUILT FOR EVERY KIND OF TEAM */}
-      <section className="relative overflow-hidden bg-white py-24">
+      {/* ... */}
+      <section className="relative overflow-hidden bg-white py-12 sm:py-20 lg:py-24">
         <img
           src="/images/loop_arrow_doodle.png"
           alt=""
           aria-hidden="true"
           className="pointer-events-none absolute bottom-3 right-[5%] hidden w-28 rotate-[12deg] select-none opacity-70 xl:block"
         />
-        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 text-center">
           <div className="inline-flex items-center gap-2 mb-4 relative">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Built for every kind of team
@@ -255,7 +255,7 @@ export default function Page() {
               <path d="M20 23 L29 15" />
             </svg>
           </div>
-          <p className="text-slate-500 max-w-xl mx-auto mb-16 text-sm">
+          <p className="text-slate-500 max-w-xl mx-auto mb-8 sm:mb-12 lg:mb-16 text-sm">
             Whether mapping design sprints or teaching classrooms, Scribbix
             offers the tools you need.
           </p>
@@ -349,8 +349,8 @@ export default function Page() {
         </div>
       </section>
       {/* START FAST WITH INTERACTIVE TEMPLATES */}
-      <section className="relative overflow-hidden bg-white py-24 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
+      <section className="relative overflow-hidden bg-white py-12 sm:py-20 lg:py-24 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 text-center">
           <div className="inline-flex items-center gap-2 mb-4 relative">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Start fast with interactive templates
@@ -368,7 +368,7 @@ export default function Page() {
               <path d="M20 23 L29 15" />
             </svg>
           </div>
-          <p className="text-slate-500 max-w-xl mx-auto mb-16 text-sm">
+          <p className="text-slate-500 max-w-xl mx-auto mb-8 sm:mb-12 lg:mb-16 text-sm">
             Choose a canvas layout to kickstart your next system design session,
             database planning, or class modeling.
           </p>
@@ -427,7 +427,7 @@ export default function Page() {
       {/* INTERACTIVE DRAWING SANDBOX */}
       <section
         id="sandbox"
-        className="py-24 bg-[#fafafb] border-t border-slate-100 relative overflow-hidden"
+        className="py-12 sm:py-20 lg:py-24 bg-[#fafafb] border-t border-slate-100 relative overflow-hidden"
       >
         <img
           src="/images/loop_arrow_doodle.png"
@@ -435,7 +435,7 @@ export default function Page() {
           aria-hidden="true"
           className="pointer-events-none absolute bottom-[5%] left-[38%] hidden w-28 rotate-[160deg] scale-y-[-1] select-none opacity-65 xl:block"
         />
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left side text column */}
             <div className="lg:col-span-5 text-left">
@@ -554,8 +554,8 @@ export default function Page() {
         </div>
       </section>
       {/* WHY TEAMS LOVE SCRIBBIX */}
-      <section className="border-t border-slate-100 bg-white py-20">
-        <div className="mx-auto max-w-7xl px-6 md:px-12">
+      <section className="border-t border-slate-100 bg-white py-12 sm:py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-12">
           <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_0.9fr_2.25fr]">
             <div className="text-left">
               <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl leading-tight">
@@ -662,9 +662,9 @@ export default function Page() {
       </section>
       {/* FOOTER */}
       {/* FAQ SECTION */}
-      <section className="py-24 bg-white border-t border-slate-100 relative">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+      <section className="py-12 sm:py-20 lg:py-24 bg-white border-t border-slate-100 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-10 lg:mb-12">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               Frequently asked questions
             </h2>
@@ -735,9 +735,9 @@ export default function Page() {
         </div>
       </section>{" "}
       {/* CTA BANNER */}
-      <section className="bg-white pb-24">
-        <div className="mx-auto max-w-7xl px-6 md:px-12">
-          <div className="relative isolate flex min-h-[280px] flex-col items-center justify-center overflow-hidden rounded-3xl border border-slate-200/60 bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] px-6 py-12 text-center sm:min-h-[300px] sm:px-10">
+      <section className="bg-white pb-12 sm:pb-20 lg:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-12">
+          <div className="relative isolate flex min-h-[260px] flex-col items-center justify-center overflow-hidden rounded-3xl border border-slate-200/60 bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] px-4 py-8 text-center sm:min-h-[300px] sm:px-10 sm:py-12">
             <img
               src="/images/cta-pen-doodle-v6.png"
               alt=""
@@ -761,8 +761,8 @@ export default function Page() {
         </div>
       </section>
       {/* FOOTER */}
-      <footer className="bg-[#fafafb] border-t border-slate-200/50 pt-10 pb-40 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      <footer className="bg-[#fafafb] border-t border-slate-200/50 pt-10 sm:pt-14 pb-24 sm:pb-32 lg:pb-40 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12 border-b border-slate-200/40 text-center md:text-left">
             {/* Left Brand Column */}
             <div className="flex justify-center md:justify-start">
@@ -817,7 +817,7 @@ export default function Page() {
         </div>
 
         {/* Large Backdrop Text Overlay */}
-        <div className="absolute bottom-[-16%] left-0 right-0 w-full flex justify-center select-none pointer-events-none z-0">
+        <div className="absolute bottom-[-8%] sm:bottom-[-12%] lg:bottom-[-16%] left-0 right-0 w-full flex justify-center select-none pointer-events-none z-0">
           <span className="font-sans font-black text-[14vw] tracking-[0.06em] leading-none text-center uppercase bg-gradient-to-b from-black/[0.15] to-black/0 text-transparent bg-clip-text">
             Skribbix
           </span>
