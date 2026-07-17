@@ -10,11 +10,24 @@ datasource db {
 model User {
   id            String     @id @default(uuid())
   email         String     @unique
-  password      String
+  password      String?
   name          String
   photo         String?
   rooms         Room[]
   chats         Chat[]
+  roomMembers   RoomMember[]
+  oauthAccounts OAuthAccount[]
+}
+
+model OAuthAccount {
+  id                String @id @default(uuid())
+  provider          String
+  providerAccountId String
+  userId            String
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Room {
@@ -24,6 +37,19 @@ model Room {
   adminId     String
   admin       User      @relation(fields: [adminId], references: [id])
   chats       Chat[]
+  members     RoomMember[]
+}
+
+model RoomMember {
+  id       String   @id @default(uuid())
+  roomId   Int
+  userId   String
+  joinedAt DateTime @default(now())
+  room     Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@index([userId])
 }
 
 model Chat {
