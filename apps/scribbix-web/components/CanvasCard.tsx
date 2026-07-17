@@ -17,6 +17,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const getUserAvatar = (userId: string) => {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return `/avatars/avatar_${(Math.abs(hash) % 10) + 1}.png`;
+};
+
 export interface CanvasRoom {
   id: number;
   slug: string;
@@ -249,7 +257,10 @@ export function CanvasCard({
                       index > 0 && "-ml-2",
                     )}
                   >
-                    <AvatarImage src={collaborator.photo || undefined} alt="" />
+                    <AvatarImage
+                      src={collaborator.photo || getUserAvatar(collaborator.id)}
+                      alt={collaborator.name}
+                    />
                     <AvatarFallback className="text-[9px] font-bold">
                       {collaborator.name.charAt(0).toUpperCase()}
                     </AvatarFallback>

@@ -108,6 +108,15 @@ const getInitials = (name: string) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
+const getUserAvatar = (userId: string) => {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = (Math.abs(hash) % 10) + 1;
+  return `/avatars/avatar_${index}.png`;
+};
+
 export function Canvas({
   roomId,
   socket,
@@ -404,12 +413,14 @@ export function Canvas({
               <div
                 key={user.userId}
                 title={user.userName}
-                className={cn(
-                  "relative size-8 rounded-full border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-extrabold tracking-wider transition-all duration-200 hover:-translate-y-0.5 hover:z-10 shadow-sm cursor-default shrink-0",
-                  getUserColorClass(user.userId),
-                )}
+                className="relative size-8 rounded-full border-2 border-white dark:border-zinc-900 overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:z-10 shadow-sm cursor-default shrink-0 bg-slate-200 dark:bg-zinc-800"
               >
-                {getInitials(user.userName)}
+                <img
+                  src={getUserAvatar(user.userId)}
+                  alt={user.userName}
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
               </div>
             ))}
           </div>
