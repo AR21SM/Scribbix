@@ -6,6 +6,7 @@
     "./client": "./src/index.ts"
   },
   "scripts": {
+    "build": "prisma generate",
     "db:generate": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js generate",
     "db:push": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js db push",
     "db:migrate": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js migrate dev",
