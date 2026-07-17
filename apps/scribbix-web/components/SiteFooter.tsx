@@ -4,7 +4,7 @@ import { BrandLogo } from "./BrandLogo";
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden border-t border-slate-200/50 bg-[#fafafb] pb-24 pt-10 sm:pb-32 sm:pt-14 lg:pb-40">
+    <footer className="relative overflow-hidden border-t border-slate-200/50 bg-[#fafafb] pb-16 pt-10 sm:pb-20 sm:pt-14 lg:pb-28">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 md:px-12">
         <div className="flex flex-col items-center justify-between gap-8 border-b border-slate-200/40 pb-12 text-center md:flex-row md:text-left">
           <div className="flex justify-center md:justify-start">
@@ -49,8 +49,8 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 flex w-full select-none justify-center sm:-bottom-[6%] lg:-bottom-[10%]">
-        <span className="bg-gradient-to-b from-black/[0.15] to-black/0 bg-clip-text text-center font-sans text-[18vw] font-black uppercase leading-none tracking-[0.06em] text-transparent sm:text-[14vw]">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 flex w-full select-none justify-center sm:-bottom-[8%] lg:-bottom-[12%]">
+        <span className="bg-gradient-to-b from-black/[0.12] to-black/0 bg-clip-text text-center font-sans text-[18vw] font-black uppercase leading-none tracking-[0.06em] text-transparent sm:text-[14vw]">
           Skribbix
         </span>
       </div>
