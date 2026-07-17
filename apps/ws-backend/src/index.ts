@@ -104,10 +104,12 @@ wss.on("connection", async (ws, request) => {
   try {
     const dbUser = await prismaClient.user.findUnique({
       where: { id: userId },
-      select: { name: true },
+      select: { name: true, email: true },
     });
-    if (dbUser?.name) {
-      userName = dbUser.name;
+    if (dbUser?.name && dbUser.name.trim()) {
+      userName = dbUser.name.trim();
+    } else if (dbUser?.email) {
+      userName = dbUser.email.split("@")[0];
     }
   } catch (error) {
     console.error("Error fetching user details:", error);

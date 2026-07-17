@@ -84,6 +84,11 @@ export class Game {
   private spacePressed = false;
   private panStart: Point = { x: 0, y: 0 };
   private collaborators: { userId: string; userName: string }[] = [];
+  private collaboratorCursors = new Map<
+    string,
+    { x: number; y: number; userName: string; lastUpdate: number }
+  >();
+  private lastCursorSent = 0;
 
   constructor(
     private canvas: HTMLCanvasElement,
@@ -278,14 +283,30 @@ export class Game {
         }
         if (message.type === "user_joined") {
           if (!this.collaborators.some(u => u.userId === message.userId)) {
-            this.collaborators.push({ userId: message.userId, userName: message.userName || "Anonymous" });
+            const realName = message.userName || "Anonymous";
+            this.collaborators.push({ userId: message.userId, userName: realName });
+            const existing = this.collaboratorCursors.get(message.userId);
+            if (existing) {
+              this.collaboratorCursors.set(message.userId, { ...existing, userName: realName });
+            }
             this.onUsersChange?.(this.collaborators);
           }
           return;
         }
         if (message.type === "user_left") {
           this.collaborators = this.collaborators.filter(u => u.userId !== message.userId);
+          this.collaboratorCursors.delete(message.userId);
           this.onUsersChange?.(this.collaborators);
+          this.clearCanvas();
+          return;
+        }
+        if (message.type === "cursor_move") {
+          const { userId, x, y } = message;
+          const collaborator = this.collaborators.find((u) => u.userId === userId);
+          const existing = this.collaboratorCursors.get(userId);
+          const userName = collaborator?.userName ?? existing?.userName ?? "Anonymous";
+          this.collaboratorCursors.set(userId, { x, y, userName, lastUpdate: Date.now() });
+          this.clearCanvas();
           return;
         }
 
@@ -340,6 +361,7 @@ export class Game {
     });
     if (this.selectionBox) this.drawSelectionBox();
     this.ctx.restore();
+    this.drawCollaboratorCursors();
   }
 
   private drawBackgroundPattern() {
@@ -812,6 +834,21 @@ export class Game {
 
   private mouseMoveHandler = (e: MouseEvent) => {
     const screen = this.toScreen(e);
+    const point = this.toWorld(screen);
+
+    const now = Date.now();
+    if (now - this.lastCursorSent > 40) {
+      this.lastCursorSent = now;
+      this.socket.send(
+        JSON.stringify({
+          type: "cursor_move",
+          roomId: this.roomId,
+          x: point.x,
+          y: point.y,
+        }),
+      );
+    }
+
     if (this.panning) {
       this.viewport.x += screen.x - this.panStart.x;
       this.viewport.y += screen.y - this.panStart.y;
@@ -819,7 +856,6 @@ export class Game {
       this.clearCanvas();
       return;
     }
-    const point = this.toWorld(screen);
     if (this.selectedTool === "select" && this.selectionBox) {
       this.selectionBox.end = point;
       this.clearCanvas();
@@ -1031,5 +1067,88 @@ export class Game {
     this.canvas.addEventListener("contextmenu", this.preventContextMenu);
     window.addEventListener("keydown", this.keyDownHandler);
     window.addEventListener("keyup", this.keyUpHandler);
+  }
+
+  private worldToScreen(world: Point): Point {
+    return {
+      x: world.x * this.zoom + this.viewport.x,
+      y: world.y * this.zoom + this.viewport.y,
+    };
+  }
+
+  private drawCollaboratorCursors() {
+    const now = Date.now();
+    const cursorTimeout = 5000;
+
+    this.collaboratorCursors.forEach((cursor, userId) => {
+      if (now - cursor.lastUpdate > cursorTimeout) {
+        this.collaboratorCursors.delete(userId);
+        return;
+      }
+
+      const collaborator = this.collaborators.find((u) => u.userId === userId);
+      const labelText = collaborator?.userName ?? cursor.userName;
+
+      const screenPos = this.worldToScreen({ x: cursor.x, y: cursor.y });
+
+      const colors = ["#7c3aed", "#0ea5e9", "#10b981", "#f97316", "#ec4899", "#eab308", "#ef4444"];
+      let hash = 0;
+      for (let i = 0; i < userId.length; i++) {
+        hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const color = colors[Math.abs(hash) % colors.length];
+
+      this.ctx.save();
+
+      const x = screenPos.x;
+      const y = screenPos.y;
+
+      this.ctx.shadowColor = "rgba(0,0,0,0.25)";
+      this.ctx.shadowBlur = 5;
+      this.ctx.shadowOffsetX = 1;
+      this.ctx.shadowOffsetY = 2;
+      this.ctx.fillStyle = color;
+      this.ctx.strokeStyle = "#ffffff";
+      this.ctx.lineWidth = 1.5;
+      this.ctx.lineJoin = "round";
+      this.ctx.lineCap = "round";
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(x, y + 15);
+      this.ctx.lineTo(x + 3.5, y + 11.5);
+      this.ctx.lineTo(x + 6, y + 17);
+      this.ctx.lineTo(x + 8, y + 16);
+      this.ctx.lineTo(x + 5.5, y + 10.5);
+      this.ctx.lineTo(x + 10, y + 10.5);
+      this.ctx.closePath();
+      this.ctx.fill();
+      this.ctx.stroke();
+
+      this.ctx.shadowColor = "transparent";
+      this.ctx.shadowBlur = 0;
+
+      this.ctx.font = "600 11px -apple-system, BlinkMacSystemFont, Inter, sans-serif";
+      const textWidth = this.ctx.measureText(labelText).width;
+      const paddingX = 7;
+      const labelHeight = 18;
+      const labelX = x + 13;
+      const labelY = y + 17;
+
+      this.ctx.fillStyle = color;
+      this.ctx.beginPath();
+      if (this.ctx.roundRect) {
+        this.ctx.roundRect(labelX, labelY, textWidth + paddingX * 2, labelHeight, 5);
+      } else {
+        this.ctx.rect(labelX, labelY, textWidth + paddingX * 2, labelHeight);
+      }
+      this.ctx.fill();
+
+      this.ctx.fillStyle = "#ffffff";
+      this.ctx.textBaseline = "middle";
+      this.ctx.fillText(labelText, labelX + paddingX, labelY + labelHeight / 2 + 0.5);
+
+      this.ctx.restore();
+    });
   }
 }
