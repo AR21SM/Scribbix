@@ -11,10 +11,8 @@ import axios from "axios";
 
 export function RoomCanvas({
   roomId,
-  className = "h-screen",
 }: {
   roomId: string;
-  className?: string;
 }) {
   const router = useRouter();
   const [socket, setSocket] = useState<WebSocket | null>(null);

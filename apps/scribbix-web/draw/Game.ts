@@ -433,7 +433,7 @@ export class Game {
   private drawShape(shape: Shape) {
     this.ctx.save();
     this.ctx.strokeStyle = shape.color;
-    this.ctx.lineWidth = shape.strokeWidth / this.zoom;
+    this.ctx.lineWidth = ("strokeWidth" in shape ? shape.strokeWidth : 1) / this.zoom;
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
 
