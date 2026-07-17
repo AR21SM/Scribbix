@@ -1,29 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { AppNavbar } from "@/components/AppNavbar";
+import { SiteFooter } from "@/components/SiteFooter";
 import { Canvas } from "@/components/Canvas";
 import { TemplatePreview } from "@/components/TemplatePreview";
+import { usePageScrolled } from "@/hooks/use-page-scrolled";
+import { UserMenu } from "@/components/UserMenu";
+import { clearAuthSession, getAuthSession } from "@/lib/auth-session";
 
-import { ArrowRight, Heart, Star, Twitter, Linkedin } from "lucide-react";
+import { ArrowRight, Heart, Star } from "lucide-react";
 
 export default function Page() {
   const router = useRouter();
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = usePageScrolled();
+  const [authReady, setAuthReady] = useState(false);
+  const [session, setSession] = useState<ReturnType<
+    typeof getAuthSession
+  > | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    setSession(getAuthSession());
+    setAuthReady(true);
   }, []);
+
+  const logout = () => {
+    clearAuthSession();
+    setSession(null);
+  };
 
   const startGuestBoard = () => {
     const randomId = Math.random().toString(36).substring(2, 10);
@@ -32,55 +39,39 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-[#fafafb] text-[#1e293b] font-sans antialiased overflow-x-hidden">
-      {/* HEADER / NAVBAR */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center w-full transition-all duration-500 ease-in-out pointer-events-none">
-        <div
-          className={`
-          w-full flex items-center justify-between transition-all duration-500 ease-in-out pointer-events-auto
-          ${
-            scrolled
-              ? "w-[90%] md:w-[95%] max-w-5xl mt-4 px-6 py-3 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/60 shadow-lg shadow-slate-100/50 mx-auto"
-              : "max-w-[1440px] mt-0 px-6 md:px-16 py-5 bg-white/80 backdrop-blur-md rounded-none border border-transparent border-b-slate-100/50 shadow-none mx-auto"
-          }
-        `}
-        >
-          <Link
-            href="/"
-            className="flex items-center text-3xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity"
-          >
-            <span>Skribbi</span>
-            <span className="relative inline-block">
-              x
-              <svg
-                className="absolute -top-2 -right-3 size-4 text-[#ffbe5c] rotate-[15deg]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3.5"
-                strokeLinecap="round"
+      <AppNavbar
+        variant="landing"
+        condensed={scrolled}
+        homeHref={session?.token ? "/dashboard" : "/"}
+        actions={
+          !authReady ? (
+            <div className="h-10 w-40" />
+          ) : session?.token ? (
+            <>
+              <Link href="/dashboard">
+                <Button className="h-10 rounded-xl bg-slate-900 px-5 font-bold text-white hover:bg-[#141b2b]">
+                  Dashboard
+                </Button>
+              </Link>
+              <UserMenu userName={session.userName} onLogout={logout} />
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signin"
+                className="text-sm font-semibold text-[#0a1128] hover:text-[#df912b] transition-colors duration-300 ease-in-out"
               >
-                <path d="M6 18 L3 12" />
-                <path d="M12 16 L12 9" />
-                <path d="M16 18 L20 14" />
-              </svg>
-            </span>
-          </Link>
-
-          <div className="flex items-center gap-6">
-            <Link
-              href="/signin"
-              className="text-sm font-semibold text-[#0a1128] hover:text-[#df912b] transition-colors duration-300 ease-in-out"
-            >
-              Log in
-            </Link>
-            <Link href="/signup">
-              <Button className="h-10 px-6 bg-slate-900 hover:bg-[#141b2b] text-white border-none rounded-xl font-medium shadow-sm transition-colors">
-                Sign up free
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+                Log in
+              </Link>
+              <Link href="/signup">
+                <Button className="h-10 px-6 bg-slate-900 hover:bg-[#141b2b] text-white border-none rounded-xl font-medium shadow-sm transition-colors">
+                  Sign up free
+                </Button>
+              </Link>
+            </>
+          )
+        }
+      />
       {/* HERO SECTION */}
       <section className="relative overflow-hidden bg-white pb-10 sm:pb-16 pt-24 sm:pt-28 lg:pb-20 lg:pt-32">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
@@ -128,23 +119,37 @@ export default function Page() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center gap-4 mb-6 w-full">
-                <Link href="/signup" className="w-full sm:w-auto">
+                <Link
+                  href={session?.token ? "/dashboard" : "/signup"}
+                  className="w-full sm:w-auto"
+                >
                   <Button className="h-12 w-full sm:w-auto px-6 text-sm bg-slate-900 hover:bg-[#141b2b] text-white font-bold rounded-xl shadow-md shadow-slate-900/10 transition-all duration-200 border-none">
-                    Start a whiteboard – it&apos;s free
+                    {session?.token
+                      ? "Go to your dashboard"
+                      : "Start a whiteboard – it’s free"}
                   </Button>
                 </Link>
-                <a
-                  href="#sandbox"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document
-                      .getElementById("sandbox")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="h-12 w-full sm:w-auto px-6 text-sm font-bold text-slate-600 bg-white rounded-xl border border-slate-200/80 shadow-sm inline-flex items-center justify-center whitespace-nowrap"
-                >
-                  Try Demo
-                </a>
+                {session?.token ? (
+                  <Link
+                    href="/dashboard#new-canvas"
+                    className="inline-flex h-12 w-full items-center justify-center whitespace-nowrap rounded-xl border border-slate-200/80 bg-white px-6 text-sm font-bold text-slate-600 shadow-sm transition-colors hover:border-slate-300 hover:text-[#0a1128] sm:w-auto"
+                  >
+                    Create new canvas
+                  </Link>
+                ) : (
+                  <a
+                    href="#sandbox"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document
+                        .getElementById("sandbox")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="inline-flex h-12 w-full items-center justify-center whitespace-nowrap rounded-xl border border-slate-200/80 bg-white px-6 text-sm font-bold text-slate-600 shadow-sm sm:w-auto"
+                  >
+                    Try Demo
+                  </a>
+                )}
               </div>
             </div>
 
@@ -525,10 +530,15 @@ export default function Page() {
               </div>
 
               <button
-                onClick={startGuestBoard}
+                onClick={() =>
+                  session?.token ? router.push("/dashboard") : startGuestBoard()
+                }
                 className="px-6 py-3.5 bg-slate-900 hover:bg-[#141b2b] text-white text-xs font-black rounded-2xl shadow-md shadow-slate-900/15 inline-flex items-center gap-2 transition-all"
               >
-                Create a Shared Workspace <ArrowRight className="size-3.5" />
+                {session?.token
+                  ? "Open your workspace"
+                  : "Create a Shared Workspace"}{" "}
+                <ArrowRight className="size-3.5" />
               </button>
             </div>
 
@@ -547,6 +557,9 @@ export default function Page() {
                       readyState: 1,
                     } as unknown as WebSocket
                   }
+                  canvasName="Sandbox canvas"
+                  canRename={false}
+                  onRename={async () => true}
                 />
               </div>
             </div>
@@ -752,88 +765,20 @@ export default function Page() {
               Join thousands of teams whiteboarding better, together.
             </p>
             <button
-              onClick={startGuestBoard}
+              onClick={() =>
+                session?.token ? router.push("/dashboard") : startGuestBoard()
+              }
               className="relative z-10 h-12 rounded-xl bg-slate-900 px-7 text-sm font-bold text-white shadow-lg shadow-slate-900/20 inline-flex items-center justify-center gap-2 whitespace-nowrap"
             >
-              Start whiteboarding for free <ArrowRight data-icon="inline-end" />
+              {session?.token
+                ? "Go to your dashboard"
+                : "Start whiteboarding for free"}{" "}
+              <ArrowRight data-icon="inline-end" />
             </button>
           </div>
         </div>
       </section>
-      {/* FOOTER */}
-      <footer className="bg-[#fafafb] border-t border-slate-200/50 pt-10 sm:pt-14 pb-24 sm:pb-32 lg:pb-40 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12 border-b border-slate-200/40 text-center md:text-left">
-            {/* Left Brand Column */}
-            <div className="flex justify-center md:justify-start">
-              <Link
-                href="/"
-                className="flex items-center text-3xl font-bold tracking-tight text-[#0a1128] hover:opacity-90 transition-opacity"
-              >
-                <span>Skribbi</span>
-                <span className="relative inline-block">
-                  x
-                  <svg
-                    className="absolute -top-2 -right-3 size-4 text-[#ffbe5c] rotate-[15deg]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                  >
-                    <path d="M6 18 L3 12" />
-                    <path d="M12 16 L12 9" />
-                    <path d="M16 18 L20 14" />
-                  </svg>
-                </span>
-              </Link>
-            </div>
-
-            {/* Right Social Column */}
-            <div className="flex flex-col items-center md:items-end gap-3.5">
-              <div className="flex gap-2.5">
-                <Link
-                  href="https://x.com/21xAshish13"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="size-9 rounded-xl bg-slate-100/80 border border-slate-200/45 flex items-center justify-center text-slate-500 hover:text-slate-955 hover:bg-slate-200/50 hover:border-slate-300 shadow-sm transition-all duration-200"
-                >
-                  <Twitter className="size-4.5" />
-                </Link>
-                <Link
-                  href="https://www.linkedin.com/in/21ashishmahajan/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="size-9 rounded-xl bg-slate-100/80 border border-slate-200/45 flex items-center justify-center text-slate-500 hover:text-slate-955 hover:bg-slate-200/50 hover:border-slate-300 shadow-sm transition-all duration-200"
-                >
-                  <Linkedin className="size-4.5" />
-                </Link>
-              </div>
-              <p className="text-[10.5px] text-slate-400 font-semibold tracking-wide flex flex-wrap items-center justify-center md:justify-end gap-1">
-                <span>&copy; {new Date().getFullYear()} Skribbix</span>
-                <span className="opacity-60">•</span>
-                <span>Built with</span>
-                <Heart className="size-3 fill-rose-500 text-rose-500" />
-                <span>by</span>
-                <Link
-                  href="https://github.com/AR21SM"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline hover:text-slate-600 transition-colors font-bold"
-                >
-                  AR21SM
-                </Link>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 sm:bottom-[-6%] lg:bottom-[-10%] left-0 right-0 w-full flex justify-center select-none pointer-events-none z-0">
-          <span className="font-sans font-black text-[18vw] sm:text-[14vw] tracking-[0.06em] leading-none text-center uppercase bg-gradient-to-b from-black/[0.15] to-black/0 text-transparent bg-clip-text">
-            Skribbix
-          </span>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

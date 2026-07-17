@@ -1,73 +1,133 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Grid2X2, List, SearchX, Sparkles } from "lucide-react";
 import { HTTP_BACKEND } from "@/config";
 import {
-  Plus,
-  ExternalLink,
-  LogOut,
-  Layout,
-  Calendar,
-  User,
-} from "lucide-react";
-import { Button } from "@repo/ui/button";
+  allocateCanvasPreviews,
+  CanvasCard,
+  type CanvasRoom,
+} from "@/components/CanvasCard";
+import { CreateCanvasCard } from "@/components/CreateCanvasCard";
+import { CreativeLoader } from "@/components/CreativeLoader";
+import { DashboardHeader } from "@/components/DashboardHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import {
+  clearAuthSession,
+  getAuthSession,
+  getAuthToken,
+} from "@/lib/auth-session";
+import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-interface Room {
-  id: number;
-  slug: string;
-  createdAt: string;
-}
+type CanvasLayout = "grid" | "list";
+type CanvasFilter = "all" | "owned" | "shared";
+type CanvasSort = "newest" | "oldest" | "name";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<CanvasRoom[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [newRoomName, setNewRoomName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [layout, setLayout] = useState<CanvasLayout>("list");
+  const [filter, setFilter] = useState<CanvasFilter>("all");
+  const [sort, setSort] = useState<CanvasSort>("newest");
   const [userName, setUserName] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<CanvasRoom | null>(null);
+  const [deletingRoomId, setDeletingRoomId] = useState<number | null>(null);
+  const [sharedRoomId, setSharedRoomId] = useState<number | null>(null);
+  const firstName = userName.trim().split(/\s+/)[0] || "Ashish";
+  const previewAssignments = useMemo(
+    () => allocateCanvasPreviews(rooms),
+    [rooms],
+  );
+
+  const visibleRooms = useMemo(() => {
+    const query = searchQuery.trim().toLocaleLowerCase();
+    return rooms
+      .filter((room) => !query || room.slug.toLocaleLowerCase().includes(query))
+      .filter((room) => filter === "all" || room.ownership === filter)
+      .sort((first, second) => {
+        if (sort === "name") return first.slug.localeCompare(second.slug);
+
+        const firstDate = new Date(first.createdAt).getTime();
+        const secondDate = new Date(second.createdAt).getTime();
+        return sort === "newest"
+          ? secondDate - firstDate
+          : firstDate - secondDate;
+      });
+  }, [filter, rooms, searchQuery, sort]);
+
+  const fetchRooms = useCallback(
+    async (token: string) => {
+      try {
+        const response = await axios.get(`${HTTP_BACKEND}/api/user/rooms`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setRooms(response.data.rooms || []);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+        const status = (error as { response?: { status?: number } }).response
+          ?.status;
+
+        if (status === 401) {
+          clearAuthSession();
+          router.replace("/signin");
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router],
+  );
 
   useEffect(() => {
-    let token = localStorage.getItem("token");
-    let name = localStorage.getItem("userName");
+    const { token, userName: storedUserName } = getAuthSession();
 
     if (!token) {
-      token = "mock-token";
-      localStorage.setItem("token", token);
+      router.replace("/signin");
+      return;
     }
 
-    if (!name) {
-      name = "Test User";
-      localStorage.setItem("userName", name);
-    }
-
-    setUserName(name);
+    setUserName(storedUserName);
     fetchRooms(token);
-  }, [router]);
-
-  const fetchRooms = async (token: string) => {
-    try {
-      const response = await axios.get(`${HTTP_BACKEND}/api/user/rooms`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setRooms(response.data.rooms || []);
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [fetchRooms, router]);
 
   const createRoom = async () => {
     if (!newRoomName.trim()) return;
 
     setCreating(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = getAuthToken();
+
+      if (!token) {
+        router.replace("/signin");
+        return;
+      }
+
       const response = await axios.post(
         `${HTTP_BACKEND}/api/room`,
-        { name: newRoomName },
+        { name: newRoomName.trim() },
         { headers: { Authorization: `Bearer ${token}` } },
       );
 
@@ -83,145 +143,314 @@ export default function DashboardPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
+    clearAuthSession();
     router.push("/");
+  };
+
+  const shareRoom = async (room: CanvasRoom) => {
+    const url = `${window.location.origin}/canvas/${room.id}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setSharedRoomId(room.id);
+      window.setTimeout(() => setSharedRoomId(null), 1800);
+    } catch {
+      window.prompt("Copy this canvas link", url);
+    }
+  };
+
+  const deleteRoom = async () => {
+    if (!deleteTarget) return;
+
+    const token = getAuthToken();
+    if (!token) {
+      router.replace("/signin");
+      return;
+    }
+
+    setDeletingRoomId(deleteTarget.id);
+    try {
+      await axios.delete(`${HTTP_BACKEND}/api/room/${deleteTarget.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setRooms((currentRooms) =>
+        currentRooms.filter((room) => room.id !== deleteTarget.id),
+      );
+      setDeleteTarget(null);
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } })
+        .response?.data?.message;
+      alert(message || "Failed to delete canvas");
+    } finally {
+      setDeletingRoomId(null);
+    }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-          <div className="text-slate-600 text-sm font-semibold">
-            Loading your canvases...
-          </div>
-        </div>
-      </div>
+      <CreativeLoader
+        title="Loading your canvases..."
+        description="Gathering your ideas and recent boards."
+      />
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900 antialiased">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-md border-b border-slate-200/50">
-        <div className="container mx-auto px-6 h-16 flex justify-between items-center">
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => router.push("/")}
-          >
-            <div className="size-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-              <Layout className="size-4" />
-            </div>
-            <span className="font-bold text-lg text-slate-900 tracking-tight">
-              Scribbix
-            </span>
-            <span className="px-2 py-0.5 text-[10px] font-semibold bg-slate-100 border border-slate-200 text-slate-500 rounded-md uppercase tracking-wider">
-              Dashboard
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 border border-slate-200/50 rounded-xl">
-              <User className="size-4 text-slate-500" />
-              <span className="text-sm font-medium text-slate-700">
-                {userName}
-              </span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-sm font-semibold rounded-xl transition-all"
-            >
-              <LogOut className="size-4" />
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#fbfbfc] font-sans text-[#0a1738] antialiased selection:bg-[#ffdf9a] selection:text-[#0a1738]">
+      <DashboardHeader
+        userName={userName}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onLogout={handleLogout}
+      />
 
-      <div className="container mx-auto px-6 py-10 max-w-5xl">
-        {/* Create Room Section */}
-        <div className="bg-white rounded-3xl p-6 mb-10 border border-slate-200/60 shadow-xl shadow-slate-100/50">
-          <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <Plus className="size-5 text-blue-600" />
-            Create a New Canvas
-          </h2>
-          <div className="flex gap-3">
-            <input
-              type="text"
-              placeholder="Enter a descriptive room name (e.g. project-brainstorming)..."
-              value={newRoomName}
-              onChange={(e) => setNewRoomName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && createRoom()}
-              className="flex-1 px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 placeholder-slate-400 transition-all"
+      <main className="mx-auto max-w-[1440px] px-4 pb-16 pt-32 sm:px-6 sm:pt-36">
+        <section className="mb-7 flex items-center justify-between gap-6 sm:mb-9">
+          <div className="relative">
+            <Sparkles
+              aria-hidden="true"
+              className="absolute -left-1 -top-3 size-5 -translate-x-full text-[#ff8a1f]"
             />
-            <Button
-              onClick={createRoom}
-              disabled={creating || !newRoomName.trim()}
-              variant="primary"
-              size="lg"
-              className="h-12 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-2 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed transition-all"
-            >
-              {creating ? "Creating..." : "Create"}
-            </Button>
+            <h1 className="text-3xl font-black tracking-[-0.045em] text-[#0a1738] sm:text-4xl">
+              Welcome back, {firstName}!
+            </h1>
+            <p className="mt-1.5 text-sm font-medium text-slate-500 sm:text-base">
+              Pick up where you left off and keep your ideas flowing.
+            </p>
           </div>
-        </div>
+          <Image
+            src="/images/loop_arrow_doodle.png"
+            alt=""
+            width={180}
+            height={76}
+            className="hidden h-16 w-auto object-contain lg:block"
+          />
+        </section>
 
-        {/* Rooms List */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <Layout className="size-5 text-slate-400" />
-              Your Canvases
+        <CreateCanvasCard
+          value={newRoomName}
+          creating={creating}
+          onChange={setNewRoomName}
+          onSubmit={createRoom}
+        />
+
+        <section className="mt-8 sm:mt-10">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+            <h2 className="text-2xl font-black tracking-[-0.04em] text-[#0a1738] sm:text-3xl">
+              Your canvases
             </h2>
-            <span className="px-2.5 py-1 text-xs font-semibold bg-blue-50 border border-blue-100 text-blue-600 rounded-full">
-              {rooms.length} {rooms.length === 1 ? "room" : "rooms"}
-            </span>
           </div>
+
+          {rooms.length > 0 && (
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <div className="shadow-scribbix-control relative grid w-full grid-cols-3 border border-slate-200/80 bg-white p-1 rounded-[14px] sm:w-[390px]">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute bottom-1 left-1 top-1 w-[calc((100%_-_0.5rem)/3)] rounded-[10px] bg-[#0a1738] shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                    filter === "owned" && "translate-x-full",
+                    filter === "shared" && "translate-x-[200%]",
+                  )}
+                />
+                {(["all", "owned", "shared"] as const).map((value) => (
+                  <Button
+                    key={value}
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    aria-pressed={filter === value}
+                    onClick={() => setFilter(value)}
+                    className={cn(
+                      "relative z-10 h-9 px-3 text-[13px] font-semibold text-slate-500 transition-colors duration-300 rounded-[10px] hover:text-[#0a1738]",
+                      filter === value &&
+                        "bg-transparent !text-white hover:bg-transparent hover:!text-white",
+                    )}
+                  >
+                    {value === "all"
+                      ? "All canvases"
+                      : value === "owned"
+                        ? "My canvases"
+                        : "Shared with me"}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Select
+                  value={sort}
+                  onValueChange={(value) =>
+                    value && setSort(value as CanvasSort)
+                  }
+                >
+                  <SelectTrigger
+                    aria-label="Sort canvases"
+                    className="shadow-scribbix-control !h-11 w-40 rounded-[14px] border-slate-200 bg-white !pl-5 !pr-3.5 text-[13px] font-semibold focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/15"
+                  >
+                    <span className="flex-1 text-left">
+                      {sort === "newest"
+                        ? "Newest first"
+                        : sort === "oldest"
+                          ? "Oldest first"
+                          : "Name"}
+                    </span>
+                  </SelectTrigger>
+                  <SelectContent
+                    align="end"
+                    className="shadow-scribbix-popover rounded-xl p-1.5"
+                  >
+                    <SelectGroup>
+                      <SelectItem
+                        value="newest"
+                        className="rounded-lg px-2 py-2 font-semibold"
+                      >
+                        Newest first
+                      </SelectItem>
+                      <SelectItem
+                        value="oldest"
+                        className="rounded-lg px-2 py-2 font-semibold"
+                      >
+                        Oldest first
+                      </SelectItem>
+                      <SelectItem
+                        value="name"
+                        className="rounded-lg px-2 py-2 font-semibold"
+                      >
+                        Name
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <div className="shadow-scribbix-control flex h-11 items-center rounded-[14px] border border-slate-200 bg-white p-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Grid view"
+                    aria-pressed={layout === "grid"}
+                    onClick={() => setLayout("grid")}
+                    className={cn(
+                      "size-9 rounded-[10px] text-slate-500 transition-colors duration-200",
+                      layout === "grid" &&
+                        "bg-[#eef3ff] text-[#0a1738] hover:bg-[#eef3ff]",
+                    )}
+                  >
+                    <Grid2X2 />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="List view"
+                    aria-pressed={layout === "list"}
+                    onClick={() => setLayout("list")}
+                    className={cn(
+                      "size-9 rounded-[10px] text-slate-500 transition-colors duration-200",
+                      layout === "list" &&
+                        "bg-[#eef3ff] text-[#0a1738] hover:bg-[#eef3ff]",
+                    )}
+                  >
+                    <List />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {rooms.length === 0 ? (
-            <div className="bg-white rounded-3xl p-16 text-center border border-slate-200/60 shadow-lg shadow-slate-100/50">
-              <div className="size-16 bg-blue-50 border border-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                <Layout className="size-8 text-blue-600" />
+            <div className="shadow-scribbix-feature relative overflow-hidden rounded-[24px] border border-slate-200/80 bg-white px-6 py-14 text-center sm:px-12">
+              <div className="relative mx-auto flex max-w-lg flex-col items-center">
+                <Image
+                  src="/images/team-remote-v2.png"
+                  alt="A team collaborating around a shared whiteboard"
+                  width={260}
+                  height={260}
+                  className="h-36 w-auto object-contain sm:h-40"
+                />
+                <p className="mt-4 text-xl font-black tracking-[-0.03em] text-[#0a1738] sm:text-2xl">
+                  Give your first idea a home.
+                </p>
+                <p className="mt-2 max-w-sm text-sm font-medium leading-relaxed text-slate-500">
+                  Name your canvas above and we&apos;ll open a fresh whiteboard
+                  for your next sketch, plan, or brainstorm.
+                </p>
               </div>
-              <p className="text-slate-900 text-lg font-bold mb-2">
-                You haven&apos;t created any canvases yet
+            </div>
+          ) : visibleRooms.length === 0 ? (
+            <div className="shadow-scribbix-feature rounded-[24px] border border-slate-200/80 bg-white px-6 py-12 text-center">
+              <SearchX className="mx-auto size-8 text-slate-400" />
+              <p className="mt-4 text-lg font-bold text-[#0a1738]">
+                No canvases match “{searchQuery}”
               </p>
-              <p className="text-slate-500 max-w-sm mx-auto text-sm mb-6">
-                Create your first room above to start drawing and collaborating
-                in real-time.
+              <p className="mt-1 text-sm text-slate-500">
+                Try a different canvas name.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {rooms.map((room) => (
-                <div
+            <div
+              key={layout}
+              className={cn(
+                "grid animate-canvas-layout gap-5",
+                layout === "grid"
+                  ? "sm:grid-cols-2 xl:grid-cols-4"
+                  : "grid-cols-1 lg:grid-cols-2",
+              )}
+            >
+              {visibleRooms.map((room) => (
+                <CanvasCard
                   key={room.id}
-                  className="bg-white rounded-3xl p-6 border border-slate-200/60 shadow-md shadow-slate-100/40 hover:shadow-xl hover:border-blue-500/20 transition-all cursor-pointer group flex flex-col justify-between min-h-[160px]"
-                  onClick={() => router.push(`/canvas/${room.id}`)}
-                >
-                  <div>
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
-                        {room.slug}
-                      </h3>
-                      <div className="size-8 rounded-xl bg-slate-50 group-hover:bg-blue-50 flex items-center justify-center shrink-0 transition-colors border border-slate-100">
-                        <ExternalLink className="size-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs font-medium text-slate-400 pt-4 border-t border-slate-50 mt-auto">
-                    <Calendar className="size-3.5" />
-                    <span>
-                      Created {new Date(room.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+                  room={room}
+                  layout={layout}
+                  onOpen={(roomId) => router.push(`/canvas/${roomId}`)}
+                  onShare={shareRoom}
+                  onDelete={setDeleteTarget}
+                  shared={sharedRoomId === room.id}
+                  previewSrc={previewAssignments.get(room.id)}
+                />
               ))}
             </div>
           )}
-        </div>
-      </div>
+        </section>
+      </main>
+
+      <Dialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => {
+          if (!open && deletingRoomId === null) setDeleteTarget(null);
+        }}
+      >
+        <DialogContent className="max-w-md rounded-2xl p-6">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-black text-[#0a1738]">
+              Delete this canvas?
+            </DialogTitle>
+            <DialogDescription className="leading-relaxed text-slate-500">
+              “{deleteTarget?.slug}” and its collaboration history will be
+              permanently removed. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-5 gap-2 sm:justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={deletingRoomId !== null}
+              onClick={() => setDeleteTarget(null)}
+              className="rounded-lg"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={deletingRoomId !== null}
+              onClick={deleteRoom}
+              className="rounded-lg"
+            >
+              {deletingRoomId !== null ? "Deleting..." : "Delete canvas"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <SiteFooter />
     </div>
   );
 }
