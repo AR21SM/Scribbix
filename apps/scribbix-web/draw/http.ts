@@ -1,10 +1,14 @@
 import { HTTP_BACKEND } from "@/config";
 import axios from "axios";
 import { Shape } from "./Game";
+import { getAuthToken } from "@/lib/auth-session";
 
 export async function getExistingShapes(roomId: string): Promise<Shape[]> {
   try {
-    const res = await axios.get(`${HTTP_BACKEND}/api/room/${roomId}/shapes`);
+    const token = getAuthToken();
+    const res = await axios.get(`${HTTP_BACKEND}/api/room/${roomId}/shapes`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return res.data.shapes || [];
   } catch (error) {
     console.error("Error fetching shapes:", error);
