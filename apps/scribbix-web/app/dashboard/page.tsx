@@ -234,7 +234,7 @@ export default function DashboardPage() {
           onSubmit={createRoom}
         />
 
-        <section className="mt-8 sm:mt-10">
+        <section className="mt-8 sm:mt-10 min-h-[620px]">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
             <h2 className="text-2xl font-black tracking-[-0.04em] text-[#0a1738] sm:text-3xl">
               Your canvases
@@ -357,14 +357,14 @@ export default function DashboardPage() {
           )}
 
           {rooms.length === 0 ? (
-            <div className="shadow-scribbix-feature relative overflow-hidden rounded-[24px] border border-slate-200/80 bg-white px-6 py-14 text-center sm:px-12">
+            <div className="shadow-scribbix-feature relative flex min-h-[680px] flex-col items-center justify-center overflow-hidden rounded-[24px] border border-slate-200/80 bg-white px-6 py-12 text-center sm:px-12">
               <div className="relative mx-auto flex max-w-lg flex-col items-center">
                 <Image
                   src="/images/team-remote-v2.png"
                   alt="A team collaborating around a shared whiteboard"
-                  width={260}
-                  height={260}
-                  className="h-36 w-auto object-contain sm:h-40"
+                  width={380}
+                  height={380}
+                  className="h-56 w-auto object-contain sm:h-64"
                 />
                 <p className="mt-4 text-xl font-black tracking-[-0.03em] text-[#0a1738] sm:text-2xl">
                   Give your first idea a home.
@@ -411,25 +411,40 @@ export default function DashboardPage() {
           )}
         </section>
         {/* Onboarding / Feature Banner at the bottom */}
-        <div className="relative mt-16 overflow-hidden rounded-[24px] border border-slate-200/80 bg-white p-8 shadow-sm">
-          <div className="absolute -right-20 -top-20 size-60 rounded-full bg-blue-100/40 blur-3xl" />
-          <div className="absolute -left-20 -bottom-20 size-60 rounded-full bg-amber-100/30 blur-3xl" />
-          <div className="relative flex flex-col items-center justify-between gap-8 md:flex-row">
-            <div className="max-w-lg text-left">
-              <h3 className="text-2xl font-black tracking-[-0.03em] text-[#0a1738]">
+        <div className="relative mt-16 overflow-hidden rounded-[28px] border border-slate-200 bg-white bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] p-8 md:p-10 shadow-sm min-h-[220px]">
+          {/* Faint hand-drawn doodles background pattern overlay */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <Image
+              src="/images/cta-pen-doodle-v6.png"
+              alt=""
+              fill
+              className="object-cover opacity-[0.12] select-none"
+            />
+          </div>
+          
+          {/* Blurred ambient background glows */}
+          <div className="absolute -right-20 -top-20 size-72 rounded-full bg-blue-100/30 blur-3xl pointer-events-none" />
+          <div className="absolute -left-20 -bottom-20 size-72 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-12 md:items-center">
+            {/* Left Column: Text Content */}
+            <div className="text-left md:col-span-5 flex flex-col justify-center">
+              <h3 className="text-2xl font-black tracking-[-0.03em] text-[#0a1738] sm:text-3xl">
                 Real-time team collaboration
               </h3>
-              <p className="mt-2 text-sm font-medium leading-relaxed text-slate-500">
+              <p className="mt-3 text-sm font-medium leading-relaxed text-slate-500">
                 Invite team members to your boards, draw together on the infinite canvas, and watch updates synchronize in real-time. Skribbix makes brainstorming, mapping, and planning frictionless.
               </p>
             </div>
-            <div className="relative shrink-0">
+            
+
+            {/* Right Column: Cropped Super-Wide Illustration (side-by-side) */}
+            <div className="relative md:col-span-7 w-full h-[210px] overflow-hidden bg-transparent">
               <Image
-                src="/images/team-high-five.png"
-                alt="Team high five"
-                width={360}
-                height={200}
-                className="h-32 w-auto object-contain md:h-40"
+                src="/images/dashboard-super-wide-collab.png?v=3"
+                alt="Team collaboration whiteboard sketch"
+                fill
+                className="object-contain object-right bg-transparent"
               />
             </div>
           </div>
