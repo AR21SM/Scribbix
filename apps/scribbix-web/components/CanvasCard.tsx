@@ -155,7 +155,7 @@ export function CanvasCard({
   return (
     <Card
       className={cn(
-        "shadow-scribbix-card group gap-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-0 transition-[border-color,box-shadow] duration-200 ease-out hover:border-[#c7d3e8]",
+        "shadow-scribbix-card group gap-0 overflow-hidden rounded-[12px] border border-slate-200/80 bg-white p-0 transition-[border-color,box-shadow] duration-200 ease-out hover:border-[#c7d3e8]",
         layout === "list" && "sm:grid sm:grid-cols-[240px_1fr]",
       )}
     >
@@ -275,7 +275,7 @@ export function CanvasCard({
           <button
             type="button"
             onClick={() => onOpen(room.id)}
-            className="ml-auto flex shrink-0 items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-bold text-[#0a1738] outline-none transition-colors hover:border-[#0a1738] hover:bg-[#0a1738] hover:text-white focus-visible:ring-2 focus-visible:ring-[#1769ff]"
+            className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-[#0a1738] outline-none transition-colors hover:border-[#0a1738] hover:bg-[#0a1738] hover:text-white focus-visible:ring-2 focus-visible:ring-[#1769ff]"
           >
             <span className="hidden sm:inline">Open board</span>
             <ArrowRight aria-hidden="true" className="size-4" />
