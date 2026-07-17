@@ -267,7 +267,7 @@ export default function Page() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {/* Card 1: Product Teams */}
-            <div className="p-6 bg-white border border-slate-200/60 rounded-3xl text-left flex flex-col shadow-sm">
+            <div className="p-6 bg-white border border-slate-200/60 rounded-2xl text-left flex flex-col shadow-sm">
               <div className="h-40 flex items-center justify-center mb-6 overflow-hidden">
                 <img
                   src="/images/team-product-v2.png"
@@ -284,7 +284,7 @@ export default function Page() {
             </div>
 
             {/* Card 2: Marketing Teams */}
-            <div className="p-6 bg-white border border-slate-200/60 rounded-3xl text-left flex flex-col shadow-sm">
+            <div className="p-6 bg-white border border-slate-200/60 rounded-2xl text-left flex flex-col shadow-sm">
               <div className="h-40 flex items-center justify-center mb-6 overflow-hidden">
                 <img
                   src="/images/team-marketing-v2.png"
@@ -301,7 +301,7 @@ export default function Page() {
             </div>
 
             {/* Card 3: Design Teams */}
-            <div className="p-6 bg-white border border-slate-200/60 rounded-3xl text-left flex flex-col shadow-sm">
+            <div className="p-6 bg-white border border-slate-200/60 rounded-2xl text-left flex flex-col shadow-sm">
               <div className="h-40 flex items-center justify-center mb-6 overflow-hidden">
                 <img
                   src="/images/team-design-v2.png"
@@ -318,7 +318,7 @@ export default function Page() {
             </div>
 
             {/* Card 4: Remote Teams */}
-            <div className="p-6 bg-white border border-slate-200/60 rounded-3xl text-left flex flex-col shadow-sm">
+            <div className="p-6 bg-white border border-slate-200/60 rounded-2xl text-left flex flex-col shadow-sm">
               <div className="h-40 flex items-center justify-center mb-6 overflow-hidden">
                 <img
                   src="/images/team-remote-v2.png"
@@ -335,7 +335,7 @@ export default function Page() {
             </div>
 
             {/* Card 5: Education */}
-            <div className="p-6 bg-white border border-slate-200/60 rounded-3xl text-left flex flex-col shadow-sm">
+            <div className="p-6 bg-white border border-slate-200/60 rounded-2xl text-left flex flex-col shadow-sm">
               <div className="h-40 flex items-center justify-center mb-6 overflow-hidden">
                 <img
                   src="/images/team-education-v2.png"
@@ -413,7 +413,7 @@ export default function Page() {
             ].map((tmpl) => (
               <div
                 key={tmpl.title}
-                className="p-6 bg-white border border-slate-200/60 rounded-3xl text-left flex flex-col shadow-sm"
+                className="p-6 bg-white border border-slate-200/60 rounded-2xl text-left flex flex-col shadow-sm"
               >
                 <div className="mb-3 flex aspect-[1.3/1] w-full items-center justify-center overflow-hidden rounded-2xl bg-white">
                   <TemplatePreview kind={tmpl.preview} />
