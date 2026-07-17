@@ -155,7 +155,7 @@ export default function Page() {
 
             {/* Right Interactive Mockup Canvas */}
             <div className="lg:col-span-8 flex justify-center w-full max-w-[760px] mx-auto relative">
-              <div className="relative rounded-2xl border border-slate-200/60 bg-white p-1 shadow-[0_24px_60px_-15px_rgba(15,23,42,0.12),_0_8px_20px_-6px_rgba(15,23,42,0.05)] z-10 w-full overflow-hidden flex flex-col">
+              <div className="relative rounded-[12px] border border-slate-200/60 bg-white p-1 shadow-[0_24px_60px_-15px_rgba(15,23,42,0.12),_0_8px_20px_-6px_rgba(15,23,42,0.05)] z-10 w-full overflow-hidden flex flex-col">
                 {/* Browser window header controls */}
                 <div className="flex items-center gap-1.5 px-4 py-2 border-b border-slate-100 bg-slate-50/50">
                   <div className="size-2.5 rounded-full bg-[#ff5f56]" />
@@ -533,7 +533,7 @@ export default function Page() {
                 onClick={() =>
                   session?.token ? router.push("/dashboard") : startGuestBoard()
                 }
-                className="px-6 py-3.5 bg-slate-900 hover:bg-[#141b2b] text-white text-xs font-black rounded-2xl shadow-md shadow-slate-900/15 inline-flex items-center gap-2 transition-all"
+                className="px-6 py-3.5 bg-slate-900 hover:bg-[#141b2b] text-white text-xs font-black rounded-xl shadow-md shadow-slate-900/15 inline-flex items-center gap-2 transition-all"
               >
                 {session?.token
                   ? "Open your workspace"
@@ -544,7 +544,7 @@ export default function Page() {
 
             {/* Right side sandboxed canvas */}
             <div className="lg:col-span-7">
-              <div className="relative w-full h-[360px] sm:h-[460px] lg:h-[500px] rounded-3xl border border-slate-200/70 overflow-hidden shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] bg-slate-50">
+              <div className="relative w-full h-[360px] sm:h-[460px] lg:h-[500px] rounded-[12px] border border-slate-200/70 overflow-hidden shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] bg-slate-50">
                 <Canvas
                   roomId="landing-sandbox"
                   socket={
