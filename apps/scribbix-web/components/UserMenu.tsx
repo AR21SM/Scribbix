@@ -58,7 +58,7 @@ export function UserMenu({ userName, onLogout }: UserMenuProps) {
         </span>
         <ChevronDown aria-hidden="true" className="size-4 text-slate-500" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={8} className="w-52">
+      <DropdownMenuContent align="end" sideOffset={8} className="w-52 rounded-2xl">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="truncate px-2 py-1.5">
             {fullName}
