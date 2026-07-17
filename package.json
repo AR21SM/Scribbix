@@ -6,7 +6,7 @@
   "author": "Ashish Mahajan",
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "corepack pnpm --parallel --filter scribbix-http-backend --filter scribbix-ws-backend --filter scribbix-web run dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "clean": "turbo clean && rm -rf node_modules",
@@ -19,7 +19,7 @@
   },
   "packageManager": "pnpm@9.14.4",
   "engines": {
-    "node": ">=20",
+    "node": ">=22.18.0",
     "pnpm": ">=9"
   }
 }

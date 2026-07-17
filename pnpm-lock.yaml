@@ -20,6 +20,12 @@ importers:
 
   apps/http-backend:
     dependencies:
+      '@repo/backend-common':
+        specifier: workspace:*
+        version: link:../../packages/backend-common
+      '@repo/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -51,12 +57,6 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
-      '@repo/backend-common':
-        specifier: workspace:*
-        version: link:../../packages/backend-common
-      '@repo/common':
-        specifier: workspace:*
-        version: link:../../packages/common
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -66,6 +66,9 @@ importers:
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
+      ws:
+        specifier: 8.18.0
+        version: 8.18.0
 
   apps/scribbix-web:
     dependencies:
@@ -84,6 +87,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dotenv:
+        specifier: 17.4.2
+        version: 17.4.2
       lucide-react:
         specifier: ^0.473.0
         version: 0.473.0(react@19.0.6)
@@ -145,6 +151,9 @@ importers:
 
   apps/ws-backend:
     dependencies:
+      '@repo/backend-common':
+        specifier: workspace:*
+        version: link:../../packages/backend-common
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -158,9 +167,6 @@ importers:
         specifier: ^8.18.0
         version: 8.18.0
     devDependencies:
-      '@repo/backend-common':
-        specifier: workspace:*
-        version: link:../../packages/backend-common
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -173,6 +179,9 @@ importers:
       '@types/node':
         specifier: ^22.10.5
         version: 22.10.5
+      dotenv:
+        specifier: 17.4.2
+        version: 17.4.2
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -193,6 +202,9 @@ importers:
       '@prisma/client':
         specifier: ^6.2.1
         version: 6.2.1(prisma@6.2.1)
+      dotenv:
+        specifier: 17.4.2
+        version: 17.4.2
       prisma:
         specifier: ^6.2.1
         version: 6.2.1
