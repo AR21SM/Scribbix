@@ -258,7 +258,7 @@ export function CanvasCard({
                     )}
                   >
                     <AvatarImage
-                      src={collaborator.photo || getUserAvatar(collaborator.id)}
+                      src={getUserAvatar(collaborator.id)}
                       alt={collaborator.name}
                     />
                     <AvatarFallback className="text-[9px] font-bold">
