@@ -12,7 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface UserMenuProps {
+const getUserAvatar = (userId: string) => {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return `/avatars/avatar_${(Math.abs(hash) % 10) + 1}.png`;
+};
+
+export interface UserMenuProps {
   userName: string;
   onLogout: () => void;
 }
@@ -21,6 +29,11 @@ export function UserMenu({ userName, onLogout }: UserMenuProps) {
   const fullName = userName.trim() || "Scribbix user";
   const displayName = fullName.split(/\s+/)[0] || "User";
   const initial = displayName.charAt(0).toUpperCase();
+
+  const userId =
+    typeof window !== "undefined"
+      ? localStorage.getItem("userId") || fullName
+      : fullName;
 
   return (
     <DropdownMenu>
@@ -33,10 +46,10 @@ export function UserMenu({ userName, onLogout }: UserMenuProps) {
           />
         }
       >
-        <Avatar size="lg" className="bg-[#ffdc77]">
+        <Avatar size="lg">
           <AvatarImage
-            src="/images/dashboard-previews/ashish-avatar.webp"
-            alt=""
+            src={getUserAvatar(userId)}
+            alt={fullName}
           />
           <AvatarFallback>{initial}</AvatarFallback>
         </Avatar>
