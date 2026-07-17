@@ -410,6 +410,30 @@ export default function DashboardPage() {
             </div>
           )}
         </section>
+        {/* Onboarding / Feature Banner at the bottom */}
+        <div className="relative mt-16 overflow-hidden rounded-[24px] border border-slate-200/80 bg-white p-8 shadow-sm">
+          <div className="absolute -right-20 -top-20 size-60 rounded-full bg-blue-100/40 blur-3xl" />
+          <div className="absolute -left-20 -bottom-20 size-60 rounded-full bg-amber-100/30 blur-3xl" />
+          <div className="relative flex flex-col items-center justify-between gap-8 md:flex-row">
+            <div className="max-w-lg text-left">
+              <h3 className="text-2xl font-black tracking-[-0.03em] text-[#0a1738]">
+                Real-time team collaboration
+              </h3>
+              <p className="mt-2 text-sm font-medium leading-relaxed text-slate-500">
+                Invite team members to your boards, draw together on the infinite canvas, and watch updates synchronize in real-time. Skribbix makes brainstorming, mapping, and planning frictionless.
+              </p>
+            </div>
+            <div className="relative shrink-0">
+              <Image
+                src="/images/team-high-five.png"
+                alt="Team high five"
+                width={360}
+                height={200}
+                className="h-32 w-auto object-contain md:h-40"
+              />
+            </div>
+          </div>
+        </div>
       </main>
 
       <Dialog

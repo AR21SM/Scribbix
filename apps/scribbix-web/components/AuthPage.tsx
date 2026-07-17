@@ -56,11 +56,40 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
         setError("Authentication failed. Please try again.");
       }
     } catch (err) {
-      const axiosError = err as { response?: { data?: { message?: string } } };
-      setError(
-        axiosError.response?.data?.message ||
-          "An error occurred. Please try again.",
-      );
+      const axiosError = err as {
+        response?: {
+          data?: {
+            message?: string;
+            errors?: Array<{ path: string[]; message: string }>;
+          };
+        };
+      };
+      
+      const validationErrors = axiosError.response?.data?.errors;
+      if (validationErrors && validationErrors.length > 0) {
+        const fieldLabels: Record<string, string> = {
+          username: "Email address",
+          password: "Password",
+          name: "Full name",
+        };
+        const errorDetails = validationErrors.map((e) => {
+          const field = e.path[0];
+          const label = field ? fieldLabels[field] || field : "Field";
+          if (field === "password" && e.message.includes("at least 8")) {
+            return "Password must be at least 8 characters long.";
+          }
+          if (field === "username") {
+            return "Please enter a valid email address.";
+          }
+          return `${label}: ${e.message}`;
+        });
+        setError(errorDetails.join(" "));
+      } else {
+        setError(
+          axiosError.response?.data?.message ||
+            "An error occurred. Please try again.",
+        );
+      }
     } finally {
       setLoading(false);
     }
