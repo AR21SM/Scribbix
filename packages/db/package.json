@@ -6,19 +6,24 @@
     "./client": "./src/index.ts"
   },
   "scripts": {
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:generate": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js generate",
+    "db:push": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js db push",
+    "db:migrate": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js migrate dev",
+    "db:deploy": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js migrate deploy",
+    "db:studio": "node -r ./load-env.cjs ./node_modules/prisma/build/index.js studio"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
   },
-  "keywords": ["database", "prisma"],
+  "keywords": [
+    "database",
+    "prisma"
+  ],
   "author": "Ashish Mahajan",
   "description": "Database package for Scribbix",
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "dotenv": "17.4.2",
     "prisma": "^6.2.1"
   }
 }
