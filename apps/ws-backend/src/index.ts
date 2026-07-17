@@ -109,7 +109,7 @@ wss.on("connection", async (ws, request) => {
     if (dbUser?.name && dbUser.name.trim()) {
       userName = dbUser.name.trim();
     } else if (dbUser?.email) {
-      userName = dbUser.email.split("@")[0];
+      userName = dbUser.email.split("@")[0] ?? dbUser.email;
     }
   } catch (error) {
     console.error("Error fetching user details:", error);
