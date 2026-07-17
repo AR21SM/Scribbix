@@ -220,6 +220,11 @@ export function Canvas({
   }, [requestTextInput, roomId, socket]);
 
   useEffect(() => {
+    game?.clearCanvas();
+  }, [game, dimensions]);
+
+
+  useEffect(() => {
     const isTypingTarget = (target: EventTarget | null) =>
       target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement ||
