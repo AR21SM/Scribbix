@@ -6,9 +6,13 @@
     "build": "tsc -b",
     "start": "node ./dist/index.js",
     "dev": "tsc -b && node ./dist/index.js",
+    "test": "tsc -b && node --test test/auth-middleware.test.cjs",
+    "test:integration": "node -r ../../packages/db/load-env.cjs --test test/live-backend.test.cjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/backend-common": "workspace:*",
+    "@repo/common": "workspace:*",
     "@repo/db": "workspace:*",
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.7",
@@ -21,13 +25,16 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@repo/backend-common": "workspace:*",
-    "@repo/common": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/bcryptjs": "^2.4.6",
-    "@types/express": "^5.0.0"
+    "@types/express": "^5.0.0",
+    "ws": "8.18.0"
   },
-  "keywords": ["whiteboard", "collaboration", "drawing"],
+  "keywords": [
+    "whiteboard",
+    "collaboration",
+    "drawing"
+  ],
   "author": "Ashish Mahajan",
   "description": "HTTP backend for Scribbix collaborative whiteboard"
 }
