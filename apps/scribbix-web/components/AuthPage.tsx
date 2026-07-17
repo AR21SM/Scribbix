@@ -98,7 +98,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
   return (
     <main className="min-h-screen bg-[#fafafb] font-sans text-slate-900 antialiased selection:bg-violet-100 selection:text-violet-950 flex items-center justify-center p-4 md:p-6">
       {/* Unified Card Container */}
-      <div className="w-full max-w-5xl rounded-[28px] border border-slate-200/60 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden flex flex-col">
+      <div className="w-full max-w-5xl rounded-[12px] border border-slate-200/60 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden flex flex-col">
         {/* Body Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] flex-grow">
           {/* Left Column (App Brand & Info Showcase) */}
@@ -165,7 +165,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   type="button"
                   disabled={socialLoading !== null}
                   onClick={() => startSocialLogin("google")}
-                  className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 text-xs font-extrabold text-[#0a1128] shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex h-11 items-center justify-center gap-2.5 rounded-[12px] border border-slate-200 bg-white px-4 text-xs font-extrabold text-[#0a1128] shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {socialLoading === "google" ? (
                     <LoaderCircle className="size-4 animate-spin" />
@@ -178,7 +178,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                   type="button"
                   disabled={socialLoading !== null}
                   onClick={() => startSocialLogin("github")}
-                  className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 text-xs font-extrabold text-[#0a1128] shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex h-11 items-center justify-center gap-2.5 rounded-[12px] border border-slate-200 bg-white px-4 text-xs font-extrabold text-[#0a1128] shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {socialLoading === "github" ? (
                     <LoaderCircle className="size-4 animate-spin" />
@@ -210,7 +210,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                         name="name"
                         type="text"
                         required={!isSignin}
-                        className="h-11 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                        className="h-11 w-full rounded-[12px] border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
                         placeholder="Your full name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -231,7 +231,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                       type="email"
                       autoComplete="email"
                       required
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                      className="h-11 w-full rounded-[12px] border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -253,7 +253,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                         isSignin ? "current-password" : "new-password"
                       }
                       required
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                      className="h-11 w-full rounded-[12px] border border-slate-200 bg-[#f8fafc] hover:border-slate-300 px-4 text-sm font-semibold text-slate-900 outline-none transition-all placeholder:text-slate-400/80 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -262,7 +262,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 </div>
 
                 {error && (
-                  <div className="rounded-xl border border-rose-100 bg-rose-50 p-4 text-xs font-semibold leading-normal text-rose-600">
+                  <div className="rounded-[12px] border border-rose-100 bg-rose-50 p-4 text-xs font-semibold leading-normal text-rose-600">
                     {error}
                   </div>
                 )}
@@ -270,7 +270,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-extrabold text-white shadow-lg shadow-slate-900/15 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[12px] bg-slate-900 px-5 text-sm font-extrabold text-white shadow-lg shadow-slate-900/15 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? (
                     <>
