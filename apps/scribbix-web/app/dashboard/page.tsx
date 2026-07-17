@@ -357,7 +357,7 @@ export default function DashboardPage() {
           )}
 
           {rooms.length === 0 ? (
-            <div className="shadow-scribbix-feature relative flex min-h-[680px] flex-col items-center justify-center overflow-hidden rounded-[24px] border border-slate-200/80 bg-white px-6 py-12 text-center sm:px-12">
+            <div className="shadow-scribbix-feature relative flex min-h-[680px] flex-col items-center justify-center overflow-hidden rounded-[12px] border border-slate-200/80 bg-white px-6 py-12 text-center sm:px-12">
               <div className="relative mx-auto flex max-w-lg flex-col items-center">
                 <Image
                   src="/images/team-remote-v2.png"
@@ -376,7 +376,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : visibleRooms.length === 0 ? (
-            <div className="shadow-scribbix-feature rounded-[24px] border border-slate-200/80 bg-white px-6 py-12 text-center">
+            <div className="shadow-scribbix-feature rounded-[12px] border border-slate-200/80 bg-white px-6 py-12 text-center">
               <SearchX className="mx-auto size-8 text-slate-400" />
               <p className="mt-4 text-lg font-bold text-[#0a1738]">
                 No canvases match “{searchQuery}”
@@ -411,7 +411,7 @@ export default function DashboardPage() {
           )}
         </section>
         {/* Onboarding / Feature Banner at the bottom */}
-        <div className="relative mt-16 overflow-hidden rounded-[28px] border border-slate-200 bg-white bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] p-8 md:p-10 shadow-sm min-h-[220px]">
+        <div className="relative mt-16 overflow-hidden rounded-[12px] border border-slate-200 bg-white bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] p-8 md:p-10 shadow-sm min-h-[220px]">
           {/* Faint hand-drawn doodles background pattern overlay */}
           <div className="absolute inset-0 z-0 pointer-events-none">
             <Image

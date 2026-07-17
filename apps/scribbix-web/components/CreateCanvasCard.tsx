@@ -26,7 +26,7 @@ export function CreateCanvasCard({
   return (
     <Card
       id="new-canvas"
-      className="shadow-scribbix-feature grid scroll-mt-28 gap-0 overflow-hidden rounded-[24px] border border-slate-200/80 bg-white p-0 lg:grid-cols-[300px_1fr]"
+      className="shadow-scribbix-feature grid scroll-mt-28 gap-0 overflow-hidden rounded-[12px] border border-slate-200/80 bg-white p-0 lg:grid-cols-[300px_1fr]"
     >
       <div className="relative hidden min-h-48 items-center justify-center overflow-hidden bg-white px-2 lg:flex">
         <Image
@@ -64,13 +64,13 @@ export function CreateCanvasCard({
               value={value}
               onChange={(event) => onChange(event.target.value)}
               placeholder="Name your canvas..."
-              className="h-12 flex-1 rounded-xl border-slate-200 bg-white px-4 text-sm shadow-none focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/15"
+              className="h-12 flex-1 rounded-[12px] border-slate-200 bg-white px-4 text-sm shadow-none focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/15"
             />
             <Button
               type="submit"
               size="lg"
               disabled={creating || !value.trim()}
-              className="h-12 rounded-xl bg-[#071738] px-6 font-bold text-white shadow-[0_8px_18px_-12px_rgba(7,23,56,0.48)] hover:bg-[#12264e] disabled:shadow-none sm:min-w-44"
+              className="h-12 rounded-[12px] bg-[#071738] px-6 font-bold text-white shadow-[0_8px_18px_-12px_rgba(7,23,56,0.48)] hover:bg-[#12264e] disabled:shadow-none sm:min-w-44"
             >
               {creating ? (
                 <>
