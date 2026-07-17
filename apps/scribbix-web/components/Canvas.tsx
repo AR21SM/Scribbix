@@ -392,7 +392,7 @@ export function Canvas({
           <span
             className={cn(
               "absolute right-[3px] top-[3px] size-6 flex items-center justify-center z-10 transition-all duration-300 pointer-events-none",
-              theme === "dark" ? "text-blue-400 scale-100 rotate-0" : "text-zinc-550 scale-90 rotate-45",
+              theme === "dark" ? "text-white scale-100 rotate-0" : "text-zinc-550 scale-90 rotate-45",
             )}
           >
             <Moon className="size-3.5" />
@@ -418,7 +418,7 @@ export function Canvas({
           type="button"
           size="sm"
           onClick={() => setShowShareDialog(true)}
-          className="h-9 rounded-xl bg-[#1769ff] px-4 font-bold text-white hover:bg-[#1257d8] shadow-md shadow-blue-500/10 active:scale-[0.98] transition-all duration-200 shrink-0"
+          className="h-9 rounded-xl bg-slate-950 px-4 font-bold text-white hover:bg-slate-800 shadow-md shadow-slate-950/10 active:scale-[0.98] transition-all duration-200 shrink-0 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white dark:shadow-white/5"
         >
           <Share2 className="mr-1.5 size-4" data-icon="inline-start" />
           Share

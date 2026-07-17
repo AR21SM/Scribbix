@@ -25,7 +25,7 @@ export function IconButton({
       type="button"
       className={`h-8 w-8 flex items-center justify-center rounded-lg transition-all duration-200 relative group shrink-0 ${
         activated
-          ? "bg-[#1769ff] text-white shadow-md shadow-blue-500/10 scale-[1.03]"
+          ? "bg-slate-950 text-white shadow-md shadow-slate-950/10 scale-[1.03] dark:bg-slate-100 dark:text-slate-950 dark:shadow-white/5"
           : "bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-zinc-300 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-50"
       }`}
     >
