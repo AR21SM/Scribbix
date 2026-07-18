@@ -4,6 +4,7 @@
   "private": true,
   "description": "Professional collaborative whiteboard for real-time drawing and team collaboration",
   "author": "Ashish Mahajan",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "turbo build",
     "dev": "corepack pnpm --parallel --filter scribbix-http-backend --filter scribbix-ws-backend --filter scribbix-web run dev",

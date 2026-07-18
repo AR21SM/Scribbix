@@ -110,3 +110,7 @@ packages/
 ## Contributing
 
 Issues and pull requests are welcome. Keep changes focused, follow the existing TypeScript conventions, and run the relevant checks before opening a pull request.
+
+## License
+
+Scribbix is licensed under the [Apache License 2.0](LICENSE).
