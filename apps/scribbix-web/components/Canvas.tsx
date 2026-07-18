@@ -80,6 +80,43 @@ const backgroundOptions: Array<{
   { value: "grid", label: "Grid", icon: Grid2X2 },
 ];
 
+function drawExportWatermark(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  theme: CanvasTheme,
+) {
+  const scale = Math.max(0.8, Math.min(1.15, Math.min(width, height) / 480));
+  const fontSize = 18 * scale;
+  const padding = 24 * scale;
+  const label = "Skribbix";
+
+  context.save();
+  context.globalAlpha = 0.72;
+  context.font = `700 ${fontSize}px Nunito, Inter, Arial, sans-serif`;
+  context.textBaseline = "bottom";
+  context.fillStyle = theme === "dark" ? "#f8fafc" : "#0a1128";
+
+  const labelWidth = context.measureText(label).width;
+  const x = width - padding - labelWidth;
+  const baseline = height - padding;
+  context.fillText(label, x, baseline);
+
+  const accentX = x + labelWidth - fontSize * 0.12;
+  const accentY = baseline - fontSize * 1.02;
+  context.strokeStyle = "#ffbe5c";
+  context.lineWidth = Math.max(1.2, scale * 1.5);
+  context.lineCap = "round";
+  context.beginPath();
+  context.moveTo(accentX - 7 * scale, accentY + 7 * scale);
+  context.lineTo(accentX - 10 * scale, accentY + scale);
+  context.moveTo(accentX, accentY + 6 * scale);
+  context.lineTo(accentX, accentY - scale);
+  context.moveTo(accentX + 5 * scale, accentY + 7 * scale);
+  context.lineTo(accentX + 9 * scale, accentY + 3 * scale);
+  context.stroke();
+  context.restore();
+}
 
 const getUserAvatar = (userId: string) => {
   let hash = 0;
@@ -266,9 +303,23 @@ export function Canvas({
 
   const handleDownload = () => {
     if (!canvasRef.current) return;
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = canvasRef.current.width;
+    exportCanvas.height = canvasRef.current.height;
+    const exportContext = exportCanvas.getContext("2d");
+    if (!exportContext) return;
+
+    exportContext.drawImage(canvasRef.current, 0, 0);
+    drawExportWatermark(
+      exportContext,
+      exportCanvas.width,
+      exportCanvas.height,
+      theme,
+    );
+
     const link = document.createElement("a");
     link.download = `scribbix-${roomId}-${Date.now()}.png`;
-    link.href = canvasRef.current.toDataURL();
+    link.href = exportCanvas.toDataURL("image/png");
     link.click();
   };
 

@@ -463,7 +463,6 @@ export default function Page() {
                     description: "Pen, shapes, or arrows",
                     image: "/images/sandbox-step-tools.png",
                     offset: "",
-                    scale: "scale-[1.53]",
                   },
                   {
                     number: "02",
@@ -471,7 +470,6 @@ export default function Page() {
                     description: "Choose color and stroke",
                     image: "/images/sandbox-step-customize.png",
                     offset: "",
-                    scale: "scale-[1.53]",
                   },
                   {
                     number: "03",
@@ -479,7 +477,6 @@ export default function Page() {
                     description: "Download when ready",
                     image: "/images/sandbox-step-save.png",
                     offset: "",
-                    scale: "scale-[1.68]",
                   },
                 ].map((step, index) => (
                   <div
@@ -491,7 +488,7 @@ export default function Page() {
                         src={step.image}
                         alt=""
                         aria-hidden="true"
-                        className={`max-h-full max-w-full object-contain ${step.scale}`}
+                        className="max-h-full max-w-full object-contain"
                       />
                     </div>
                     <h3 className="text-xs font-extrabold text-slate-900">
