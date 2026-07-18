@@ -2,6 +2,14 @@
 
 Scribbix is a real-time collaborative whiteboard for drawing, planning, and sharing ideas with a team.
 
+## Screenshots
+
+![Scribbix hero workspace](docs/screenshots/scribbix-hero.png)
+
+![Scribbix dashboard](docs/screenshots/dashboard.png)
+
+![Scribbix canvas editor](docs/screenshots/canvas.png)
+
 ## Features
 
 - Real-time multi-user canvas with collaborator presence and cursors
